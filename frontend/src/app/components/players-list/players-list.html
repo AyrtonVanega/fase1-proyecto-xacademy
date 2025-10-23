@@ -1,0 +1,61 @@
+<div class="players-container">
+  <h2>Listado de Jugadores</h2>
+
+  <div class="filters">
+    <input [(ngModel)]="filters.name" placeholder="Nombre" />
+    <input [(ngModel)]="filters.fifa_version" placeholder="Versión FIFA" />
+    <input [(ngModel)]="filters.nationality" placeholder="Nacionalidad" />
+    <input [(ngModel)]="filters.club" placeholder="Club" />
+    <input [(ngModel)]="filters.position" placeholder="Posición" />
+    <button (click)="search()">Buscar</button>
+  </div>
+
+  <button class="create-btn" (click)="createPlayer()">Crear Nuevo Jugador</button>
+  <button class="export-btn" (click)="exportCsv()">Exportar Listado XLSX</button>
+
+  <div *ngIf="loading" class="loading">Cargando...</div>
+
+  <table *ngIf="!loading && players.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Version FIFA</th>
+        <th>Nombre</th>
+        <th>Edad</th>
+        <th>Nacionalidad</th>
+        <th>Club</th>
+        <th>Posiciones</th>
+        <th>Overall</th>
+        <th>Potencial</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of players">
+        <td>{{ p.id }}</td>
+        <td>{{ p.fifa_version }}</td>
+        <td>{{ p.long_name }}</td>
+        <td>{{ p.age }}</td>
+        <td>{{ p.nationality_name }}</td>
+        <td>{{ p.club_name }}</td>
+        <td>{{ p.player_positions }}</td>
+        <td>{{ p.overall }}</td>
+        <td>{{ p.potential }}</td>
+        <td>
+          <button class="info-btn" (click)="verInfo(p.id)">Ver Info</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && players.length === 0">
+    <p>No se encontraron jugadores.</p>
+  </div>
+
+  <div class="pagination" *ngIf="!loading && totalPages > 1">
+    <button (click)="prevPage()" [disabled]="page === 1">Anterior</button>
+    <span>Página {{ page }} de {{ totalPages }} ({{ total }} jugadores)</span>
+    <button (click)="nextPage()" [disabled]="page === totalPages">Siguiente</button>
+  </div>
+
+
+</div>

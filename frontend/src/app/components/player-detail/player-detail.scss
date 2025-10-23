@@ -1,0 +1,216 @@
+.player-detail-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #2a2a3d;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+
+    .page-title {
+        color: #4a90e2;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    /* Layout principal */
+    .form-layout {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+
+        /* Info básica */
+        .info-card {
+            flex: 1 1 350px;
+            background-color: #1e1e2f;
+            padding: 1rem;
+            border-radius: 12px;
+            min-width: 280px;
+
+            .section-title {
+                font-size: 1.2rem;
+                color: #4a90e2;
+                margin-bottom: 1rem;
+            }
+
+            .info-fields {
+                display: flex;
+                flex-direction: column;
+
+                label {
+                    color: #b0b0c0;
+                    margin-top: 0.5rem;
+                    margin-bottom: 0.2rem;
+                }
+
+                input {
+                    padding: 0.5rem;
+                    border-radius: 6px;
+                    border: none;
+                    background-color: #2a2a3d;
+                    color: #ffffff;
+
+                    &.invalid {
+                        border: 1px solid #ff6b6b;
+                    }
+                }
+            }
+
+            /* Botones dentro de info-card */
+            .btn-save {
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                border: none;
+                background-color: #50c878;
+                color: #fff;
+                font-weight: bold;
+                cursor: pointer;
+                margin-top: 1rem;
+                transition: background-color 0.3s;
+
+                &:hover {
+                    background-color: #4a90e2;
+                }
+            }
+        }
+
+        /* Contenedor de habilidades / gráficos */
+        .skills-container {
+            flex: 3 1 600px;
+            min-width: 400px;
+            background-color: #1e1e2f;
+            padding: 1rem;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+            .section-title {
+                font-size: 1.2rem;
+                color: #4a90e2;
+                margin-bottom: 0.7rem;
+            }
+
+            /* Grilla de edición de skills */
+            .skills-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 1rem;
+
+                .skill-group {
+                    background-color: #2a2a3d;
+                    padding: 0.7rem;
+                    border-radius: 8px;
+
+                    h4 {
+                        font-size: 1rem;
+                        color: #50c878;
+                        margin-bottom: 0.5rem;
+                    }
+
+                    .skill-fields {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 0.3rem;
+
+                        label {
+                            font-size: 0.85rem;
+                            color: #b0b0c0;
+                        }
+
+                        input {
+                            padding: 0.4rem;
+                            border-radius: 6px;
+                            border: none;
+                            background-color: #1e1e2f;
+                            color: #ffffff;
+
+                            &.invalid {
+                                border: 1px solid #ff6b6b;
+                            }
+                        }
+                    }
+                }
+            }
+
+            /* Vista de gráficos */
+            .charts-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 1rem;
+
+                .chart-container {
+                    width: 100%;
+                    min-height: 300px;
+                    background-color: #2a2a3d;
+                    padding: 0.8rem;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+                }
+            }
+        }
+    }
+
+    /* Botones de acción global */
+    .edit-back-buttons,
+    .btn-cancel,
+    .btn-back,
+    .btn-edit,
+    .btn-save {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 0.5rem;
+        transition: background-color 0.3s, transform 0.1s;
+    }
+
+    .btn-edit {
+        background-color: #4a90e2;
+        color: #fff;
+
+        &:hover {
+            background-color: #50c878;
+        }
+    }
+
+    .btn-back,
+    .btn-cancel {
+        background-color: #ff6b6b;
+        color: #fff;
+
+        &:hover {
+            background-color: #e74c3c;
+        }
+    }
+
+    .btn-save {
+        background-color: #50c878;
+        color: #fff;
+
+        &:hover {
+            background-color: #4a90e2;
+        }
+    }
+
+    .error-message {
+        text-align: center;
+        color: #ff6b6b;
+        margin-top: 1rem;
+    }
+}
+
+/* Apilar columnas en pantallas chicas */
+@media (max-width: 900px) {
+    .player-detail-container .form-layout {
+        flex-direction: column;
+    }
+
+    .skills-container .charts-grid {
+        grid-template-columns: 1fr;
+        /* un gráfico por fila */
+    }
+}

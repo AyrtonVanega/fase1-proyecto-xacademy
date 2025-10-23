@@ -1,0 +1,8 @@
+<nav class="navbar">
+    <span class="navbar-title" (click)="goHome()">FIFA</span>
+    
+    <div class="navbar-right">
+        <button *ngIf="!authService.isLoggedIn()" (click)="login()">Login</button>
+        <button *ngIf="authService.isLoggedIn()" (click)="logout()">Cerrar Sesión</button>
+    </div>
+</nav>

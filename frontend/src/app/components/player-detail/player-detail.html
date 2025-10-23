@@ -1,0 +1,87 @@
+<div class="player-detail-container">
+    <!-- Titulo de la pagina segun el modo (modo Creacion / Vista) -->
+    <h2 class="page-title">
+        {{ isCreationMode ? 'Crear Nuevo Jugador' : (isEditing ? 'Editar Jugador' : 'Detalle del Jugador') }}
+    </h2>
+
+    <div *ngIf="!loading && (player || isCreationMode)" [formGroup]="playerForm">
+
+        <!-- Seccion de encabezado con nombre y botones -->
+        <div class="header-section">
+            <h3 class="player-name">
+                {{ playerForm.get('long_name')?.value || 'Jugador sin Nombre' }}
+            </h3>
+            <div class="actions">
+
+                <!-- Botones Editar / Volver (modo Vista) -->
+                <div *ngIf="!isCreationMode && !isEditing" class="edit-back-buttons">
+                    <button (click)="toggleEditMode()" class="btn btn-edit">Editar</button>
+                    <button (click)="goBack()" class="btn btn-back">Volver</button>
+                </div>
+
+                <!-- Boton Cancelar (modo Edicion / Creacion) -->
+                <button *ngIf="isEditing" (click)="toggleEditMode()" class="btn btn-cancel"
+                    [disabled]="isSaving">Cancelar</button>
+
+            </div>
+        </div>
+
+        <div class="form-layout">
+            <!-- LADO IZQUIERDO -->
+            <div class="info-card">
+
+                <!-- Informacion Basica (modo Vista / Edicion / Creacion) -->
+                <h3 class="section-title">Información Básica</h3>
+                <div class="info-fields">
+                    <ng-container *ngFor="let field of basicInfoFields">
+                        <label>{{ field.label }}</label>
+                        <input [formControlName]="field.key" [type]="field.type" [readonly]="!isEditing"
+                            [min]="field.min" [max]="field.max" />
+                    </ng-container>
+                </div>
+
+                <!-- Boton Guardar / Crear (modo Edicion / Creacion) -->
+                <button *ngIf="isEditing" (click)="savePlayer()" [disabled]="isSaving || !isFormValid()"
+                    class="btn btn-save">
+                    {{ isSaving ? 'Guardando...' : (isCreationMode ? 'Crear Jugador' : 'Guardar Cambios') }}
+                </button>
+            </div>
+
+
+            <!-- LADO DERECHO -->
+            <div class="skills-container" *ngIf="isEditing || player">
+
+                <!-- Titulo Dinamico (modo Vista / Edicion - Creacion) -->
+                <h3 class="section-title">
+                    {{ isEditing ? 'Ajuste de Habilidades (0-100)' : 'Análisis de Habilidades' }}
+                </h3>
+
+                <!-- Edicion de Habilidades (modo Edicion / Creacion) -->
+                <div *ngIf="isEditing" class="skills-grid">
+                    <div *ngFor="let group of skillGroups" class="skill-group">
+                        <h4>{{ group.title }}</h4>
+                        <div class="skill-fields">
+                            <div *ngFor="let field of group.formFields" class="skill-field">
+                                <label>{{ field.label }}</label>
+                                <input [formControlName]="field.key" type="number" min="0" max="100"
+                                    [ngClass]="{'invalid': playerForm.get(field.key)?.invalid && playerForm.get(field.key)?.touched}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vista de Graficos (modo Vista) -->
+                <div *ngIf="!isEditing && player" class="charts-grid">
+                    <app-skill-radar-chart *ngFor="let group of skillGroups" [chartTitle]="group.title"
+                        [radarChartLabels]="group.labels" [skillData]="group.data">
+                    </app-skill-radar-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensaje de Error -->
+    <div *ngIf="!loading && !player && !isCreationMode" class="error-message">
+        <p>Jugador no encontrado</p>
+    </div>
+</div>
