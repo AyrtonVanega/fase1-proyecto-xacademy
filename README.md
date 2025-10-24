@@ -33,7 +33,6 @@ Tecnologias necesarias para ejecutar la app
 2. Abrí **DBeaver** o una consola MySQL
 3. Ejecutá el archivo `fifa_local.sql`:
 
-````
 
 Esto creará la base `fifa_local` y cargará los datos iniciales.
 
@@ -52,9 +51,18 @@ Esto creará la base `fifa_local` y cargará los datos iniciales.
 
 1. Entrá en la carpeta del frontend
 2. Instalá las dependencias (npm install)
-3. Iniciá la aplicación (npm start)
+3. Iniciá la aplicación (npm start / ng serve)
 4. Abrí el navegador en:
 [http://localhost:4200](http://localhost:4200)
+
+---
+
+## 🔐 Log in
+
+Datos para loguearse en la app:
+
+* Usuario: usuario
+* Contraseña: 1234
 
 ---
 
