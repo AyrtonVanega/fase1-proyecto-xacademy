@@ -13,15 +13,16 @@ const listPlayers = async (req, res) => {
       club,
       position,
     } = req.query;
-    let { page } = req.query;
 
-    page = parseInt(page, 10);
-    if (isNaN(page) || page < 1) page = 1;
-
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
     const filters = { fifa_version, name, nationality, club, position };
     const limit = 50;
 
-    const result = await playerService.buscarTodos(filters, page, limit, false);
+    const result = await playerService.buscarTodos({
+      filters,
+      page,
+      limit
+    });
 
     res.json(result);
   } catch (err) {
@@ -45,7 +46,7 @@ const exportPlayers = async (req, res) => {
 
     const filters = { fifa_version, name, nationality, club, position };
 
-    const players = await playerService.buscarTodos(filters, null, null, true);
+    const players = await playerService.exportarJugadores({ filters });
 
     // Enviar XLSX
     sendXlsx(res, players, "players.xlsx");

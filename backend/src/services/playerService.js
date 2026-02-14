@@ -1,52 +1,11 @@
 const playerProvider = require("../providers/playerProvider");
 
-async function buscarTodos(filters, page, limit, all = false) {
-  try {
-    const allPlayers = await playerProvider.findAll();
+async function buscarTodos({ filters, page, limit }) {
+  return await playerProvider.findPaginated({ filters, page, limit });
+}
 
-    // Filtrados
-    const filtered = allPlayers.filter(p => {
-      const matchFifa = filters.fifa_version
-        ? p.fifa_version?.toLowerCase().includes(filters.fifa_version.toLowerCase())
-        : true;
-      const matchName = filters.name
-        ? p.long_name?.toLowerCase().includes(filters.name.toLowerCase())
-        : true;
-      const matchNationality = filters.nationality
-        ? p.nationality_name?.toLowerCase().includes(filters.nationality.toLowerCase())
-        : true;
-      const matchClub = filters.club
-        ? p.club_name?.toLowerCase().includes(filters.club.toLowerCase())
-        : true;
-      const matchPosition = filters.position
-        ? p.player_positions?.toLowerCase().includes(filters.position.toLowerCase())
-        : true;
-
-      return matchFifa && matchName && matchNationality && matchClub && matchPosition;
-    });
-
-    if (all) {
-      return filtered;
-    }
-    
-    // Paginación
-    const total = filtered.length;
-    const totalPages = Math.ceil(total / limit);
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
-    const data = filtered.slice(startIndex, endIndex);
-
-    return {
-      page,
-      limit,
-      total,
-      totalPages,
-      data,
-    };
-  } catch (err) {
-    console.error("Error en PlayerService.buscarPaginado:", err);
-    throw err;
-  }
+async function exportarJugadores({ filters }) {
+  return await playerProvider.findAllFiltered({ filters });
 }
 
 async function buscarPorId(id) {
@@ -150,4 +109,4 @@ async function crearJugador(data) {
   }
 }
 
-module.exports = { buscarTodos, buscarPorId, actualizarJugador, crearJugador };
+module.exports = { buscarTodos, exportarJugadores, buscarPorId, actualizarJugador, crearJugador };
