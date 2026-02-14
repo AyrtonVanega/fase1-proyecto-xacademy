@@ -85,21 +85,13 @@ async function findById(id) {
 }
 
 async function updateById(id, data) {
-  try {
-    const [rowsUpdated] = await Player.update(data, {
-      where: { id },
-    });
+  const player = await Player.findByPk(id);
 
-    if (rowsUpdated === 0) {
-      return null; // no se encontró el jugador
-    }
+  if (!player) return null;
 
-    const updatedPlayer = await Player.findByPk(id);
-    return updatedPlayer.get({ plain: true });
-  } catch (err) {
-    console.error("Error en PlayerProvider.updateById:", err);
-    throw err;
-  }
+  await player.update(data);
+
+  return player.get({ plain: true });
 }
 
 async function createPlayer(data) {

@@ -74,14 +74,19 @@ const getPlayerById = async (req, res) => {
 
 const updatePlayer = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "ID inválido" });
+    }
+
     const updated = await playerService.actualizarJugador(id, req.body);
 
     if (!updated) {
       return res.status(404).json({ message: "Jugador no encontrado" });
     }
 
-    res.json({ message: "Jugador actualizado correctamente", jugador: updated });
+    res.json(updated);
+
   } catch (err) {
     console.error("updatePlayer error:", err);
     res.status(500).json({ error: "Error interno al actualizar jugador" });
@@ -91,7 +96,7 @@ const updatePlayer = async (req, res) => {
 const createPlayer = async (req, res) => {
   try {
     const newPlayer = await playerService.crearJugador(req.body);
-    res.status(201).json({ message: "Jugador creado exitosamente", jugador: newPlayer });
+    res.status(201).json(newPlayer);
   } catch (err) {
     console.error("createPlayer error:", err);
     res.status(500).json({ error: "Error interno al crear jugador" });
