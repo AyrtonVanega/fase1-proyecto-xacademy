@@ -1,16 +1,13 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { Chart, registerables } from 'chart.js';
 import { BasicInfoComponent } from './basic-info/basic-info';
 import { SkillsAnalysisComponent } from './skills-analysis/skills-analysis';
 import { SkillsEditorComponent } from './skills-editor/skills-editor';
 import { PlayerService } from '../../services/player';
 import { AuthService } from '../../services/auth';
-
-Chart.register(...registerables);
 
 interface PlayerDetails {
   id: number;
