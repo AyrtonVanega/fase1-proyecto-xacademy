@@ -1,5 +1,5 @@
 .player-detail-container {
-    max-width: 1200px;
+    max-width: 1500px;
     margin: 2rem auto;
     padding: 2rem;
     background-color: #2a2a3d;
@@ -76,22 +76,6 @@
                             }
                         }
                     }
-                }
-            }
-
-            /* Vista de gráficos */
-            .charts-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 1rem;
-
-                .chart-container {
-                    width: 100%;
-                    min-height: 300px;
-                    background-color: #2a2a3d;
-                    padding: 0.8rem;
-                    border-radius: 12px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
                 }
             }
         }

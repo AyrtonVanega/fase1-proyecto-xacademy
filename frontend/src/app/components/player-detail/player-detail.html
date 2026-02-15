@@ -19,11 +19,11 @@
                     <button (click)="goBack()" class="btn btn-back">Volver</button>
                 </div>
 
-                <!-- Boton Cancelar (modo Edicion / Creacion) -->
-                <button *ngIf="isEditing" (click)="toggleEditMode()" class="btn btn-cancel"
-                    [disabled]="isSaving">Cancelar</button>
-                <button *ngIf="isEditing" (click)="savePlayer()" class="btn btn-save"
-                    [disabled]="isSaving">Guardar</button>
+                <!-- Boton Guardar y Cancelar (modo Edicion / Creacion) -->
+                <div *ngIf="isEditing || isCreationMode" class="save-cancel-buttons">
+                    <button (click)="savePlayer()" class="btn btn-save" [disabled]="isSaving">Guardar</button>
+                    <button (click)="toggleEditMode()" class="btn btn-cancel" [disabled]="isSaving">Cancelar</button>
+                </div>
 
             </div>
         </div>
@@ -38,8 +38,8 @@
             <div class="skills-container" *ngIf="isEditing || player">
 
                 <!-- Titulo Dinamico (modo Vista / Edicion - Creacion) -->
-                <h3 class="section-title">
-                    {{ isEditing ? 'Ajuste de Habilidades (0-100)' : 'Análisis de Habilidades' }}
+                <h3 class="section-title" *ngIf="isEditing">
+                    Ajuste de Habilidades (0-100)
                 </h3>
 
                 <!-- Edicion de Habilidades (modo Edicion / Creacion) -->
@@ -57,11 +57,8 @@
                 </div>
 
                 <!-- Vista de Graficos (modo Vista) -->
-                <div *ngIf="!isEditing && player" class="charts-grid">
-                    <app-skill-radar-chart *ngFor="let group of skillGroups" [chartTitle]="group.title"
-                        [radarChartLabels]="group.labels" [skillData]="group.data">
-                    </app-skill-radar-chart>
-                </div>
+                <app-skills-analysis *ngIf="!isEditing && player" [skillGroups]="skillGroups">
+                </app-skills-analysis>
             </div>
         </div>
     </div>

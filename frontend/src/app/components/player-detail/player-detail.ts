@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Chart, registerables } from 'chart.js';
-import { SkillRadarChartComponent } from '../skill-radar-chart/skill-radar-chart';
 import { BasicInfoComponent } from './basic-info/basic-info';
+import { SkillsAnalysisComponent } from './skills-analysis/skills-analysis';
 import { PlayerService } from '../../services/player';
 import { AuthService } from '../../services/auth';
 
@@ -91,8 +91,8 @@ interface SkillGroup {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    SkillRadarChartComponent,
     BasicInfoComponent,
+    SkillsAnalysisComponent,
   ],
   templateUrl: './player-detail.html',
   styleUrls: ['./player-detail.scss']
@@ -132,8 +132,6 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
   ];
 
   private playerSubscription: Subscription | null = null;
-
-  @ViewChildren(SkillRadarChartComponent) chartComponents!: QueryList<SkillRadarChartComponent>;
 
   constructor(
     private route: ActivatedRoute,

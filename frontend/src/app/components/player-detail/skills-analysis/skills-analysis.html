@@ -1,0 +1,13 @@
+<div class="skills-container">
+
+    <h3 class="section-title">Análisis de Habilidades</h3>
+
+    <div class="charts-grid">
+
+        <app-skill-radar-chart *ngFor="let group of skillGroups" [chartTitle]="group.title"
+            [radarChartLabels]="group.labels" [skillData]="group.data">
+        </app-skill-radar-chart>
+
+    </div>
+
+</div>
