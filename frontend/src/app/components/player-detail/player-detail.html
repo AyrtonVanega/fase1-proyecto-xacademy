@@ -22,30 +22,16 @@
                 <!-- Boton Cancelar (modo Edicion / Creacion) -->
                 <button *ngIf="isEditing" (click)="toggleEditMode()" class="btn btn-cancel"
                     [disabled]="isSaving">Cancelar</button>
+                <button *ngIf="isEditing" (click)="savePlayer()" class="btn btn-save"
+                    [disabled]="isSaving">Guardar</button>
 
             </div>
         </div>
 
         <div class="form-layout">
-            <!-- LADO IZQUIERDO -->
-            <div class="info-card">
-
-                <!-- Informacion Basica (modo Vista / Edicion / Creacion) -->
-                <h3 class="section-title">Información Básica</h3>
-                <div class="info-fields">
-                    <ng-container *ngFor="let field of basicInfoFields">
-                        <label>{{ field.label }}</label>
-                        <input [formControlName]="field.key" [type]="field.type" [readonly]="!isEditing"
-                            [min]="field.min" [max]="field.max" />
-                    </ng-container>
-                </div>
-
-                <!-- Boton Guardar / Crear (modo Edicion / Creacion) -->
-                <button *ngIf="isEditing" (click)="savePlayer()" [disabled]="isSaving || !isFormValid()"
-                    class="btn btn-save">
-                    {{ isSaving ? 'Guardando...' : (isCreationMode ? 'Crear Jugador' : 'Guardar Cambios') }}
-                </button>
-            </div>
+            <!-- Informacion Basica -->
+            <app-basic-info [form]="playerForm" [fields]="basicInfoFields" [isEditing]="isEditing">
+            </app-basic-info>
 
 
             <!-- LADO DERECHO -->

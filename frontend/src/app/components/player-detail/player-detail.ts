@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { Subscription } from 'rxjs';
 import { Chart, registerables } from 'chart.js';
 import { SkillRadarChartComponent } from '../skill-radar-chart/skill-radar-chart';
+import { BasicInfoComponent } from './basic-info/basic-info';
 import { PlayerService } from '../../services/player';
 import { AuthService } from '../../services/auth';
 
@@ -91,6 +92,7 @@ interface SkillGroup {
     CommonModule,
     ReactiveFormsModule,
     SkillRadarChartComponent,
+    BasicInfoComponent,
   ],
   templateUrl: './player-detail.html',
   styleUrls: ['./player-detail.scss']
@@ -120,7 +122,7 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
     { key: 'wage_eur', label: 'Sueldo (€)', type: 'number' },
     { key: 'height_cm', label: 'Altura (cm)', type: 'number' },
     { key: 'weight_kg', label: 'Peso (kg)', type: 'number' },
-    { key: 'preferred_foot', label: 'Pie Preferido', type: 'text' },
+    { key: 'preferred_foot', label: 'Pie Preferido', type: 'select' },
     { key: 'weak_foot', label: 'Weak Foot', type: 'number', min: 0, max: 5 },
     { key: 'skill_moves', label: 'Skill Moves', type: 'number', min: 0, max: 5 },
     { key: 'international_reputation', label: 'Reputación Internacional', type: 'number', min: 0, max: 5 },
@@ -154,13 +156,14 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
     const idParam = this.route.snapshot.paramMap.get('id');
 
     if (idParam) {
-      // Modo Detalle / Edición
+      // Modo Vista
       this.id = Number(idParam);
       this.isCreationMode = false;
-      this.isEditing = false;
+      this.playerForm.disable();
+      this.playerForm.get('id')?.disable();
       this.loadPlayer(this.id);
     } else {
-      // Modo Creación
+      // Modo Creación/Edicion
       this.isCreationMode = true;
       this.isEditing = true;
       this.loading = false;
@@ -175,70 +178,99 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
 
   /** Inicializa el formulario */
   initForm(): void {
+    const ratingValidators = [
+      Validators.required,
+      Validators.min(0),
+      Validators.max(100)
+    ];
+
+    const smallRatingValidators = [
+      Validators.min(1),
+      Validators.max(5)
+    ];
+
     this.playerForm = this.fb.group({
       id: [{ value: 0, disabled: true }], // readonly
-      fifa_version: ['', Validators.required],
-      fifa_update: ['', Validators.required],
-      player_face_url: ['', Validators.required],
-      long_name: ['', Validators.required],
-      club_name: [''],
+
+      fifa_version: ['', [Validators.required, Validators.maxLength(255)]],
+      fifa_update: ['', [Validators.required, Validators.maxLength(255)]],
+      player_face_url: ['', [Validators.required, Validators.pattern(/https?:\/\/.+/)]],
+      long_name: ['', [Validators.required, Validators.maxLength(255)]],
       player_positions: ['', Validators.required],
-      nationality_name: [''],
-      overall: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      potential: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      value_eur: [0],
-      wage_eur: [0],
-      age: [0, [Validators.required, Validators.min(18), Validators.max(40)]],
-      height_cm: [0],
-      weight_kg: [0],
-      preferred_foot: [''],
-      weak_foot: [0],
-      skill_moves: [0],
-      international_reputation: [0],
-      work_rate: [''],
-      body_type: [''],
-      pace: [0],
-      shooting: [0],
-      passing: [0],
-      dribbling: [0],
-      defending: [0],
-      physic: [0],
-      attacking_crossing: [0],
-      attacking_finishing: [0],
-      attacking_heading_accuracy: [0],
-      attacking_short_passing: [0],
-      attacking_volleys: [0],
-      skill_dribbling: [0],
-      skill_curve: [0],
-      skill_fk_accuracy: [0],
-      skill_long_passing: [0],
-      skill_ball_control: [0],
-      movement_acceleration: [0],
-      movement_sprint_speed: [0],
-      movement_agility: [0],
-      movement_reactions: [0],
-      movement_balance: [0],
-      power_shot_power: [0],
-      power_jumping: [0],
-      power_stamina: [0],
-      power_strength: [0],
-      power_long_shots: [0],
-      mentality_aggression: [0],
-      mentality_interceptions: [0],
-      mentality_positioning: [0],
-      mentality_vision: [0],
-      mentality_penalties: [0],
-      mentality_composure: [0],
-      defending_marking: [0],
-      defending_standing_tackle: [0],
-      defending_sliding_tackle: [0],
-      goalkeeping_diving: [0],
-      goalkeeping_handling: [0],
-      goalkeeping_kicking: [0],
-      goalkeeping_positioning: [0],
-      goalkeeping_reflexes: [0],
-      goalkeeping_speed: [0],
-      player_traits: [''],
+
+      club_name: ['', Validators.maxLength(255)],
+      nationality_name: ['', Validators.maxLength(255)],
+
+      overall: [0, ratingValidators],
+      potential: [0, ratingValidators],
+
+      value_eur: [0, [Validators.min(0)]],
+      wage_eur: [0, [Validators.min(0)]],
+
+      age: [18, [Validators.required, Validators.min(15), Validators.max(60)]],
+      height_cm: [170, [Validators.min(120), Validators.max(230)]],
+      weight_kg: [70, [Validators.min(40), Validators.max(150)]],
+
+      preferred_foot: ['Left', Validators.required],
+
+      weak_foot: [1, smallRatingValidators],
+      skill_moves: [1, smallRatingValidators],
+      international_reputation: [1, smallRatingValidators],
+
+      work_rate: ['', Validators.maxLength(255)],
+      body_type: ['', Validators.maxLength(255)],
+      player_traits: ['', Validators.maxLength(255)],
+
+      // Skills 0–100
+      pace: [0, ratingValidators],
+      shooting: [0, ratingValidators],
+      passing: [0, ratingValidators],
+      dribbling: [0, ratingValidators],
+      defending: [0, ratingValidators],
+      physic: [0, ratingValidators],
+
+      attacking_crossing: [0, ratingValidators],
+      attacking_finishing: [0, ratingValidators],
+      attacking_heading_accuracy: [0, ratingValidators],
+      attacking_short_passing: [0, ratingValidators],
+      attacking_volleys: [0, ratingValidators],
+
+      skill_dribbling: [0, ratingValidators],
+      skill_curve: [0, ratingValidators],
+      skill_fk_accuracy: [0, ratingValidators],
+      skill_long_passing: [0, ratingValidators],
+      skill_ball_control: [0, ratingValidators],
+
+      movement_acceleration: [0, ratingValidators],
+      movement_sprint_speed: [0, ratingValidators],
+      movement_agility: [0, ratingValidators],
+      movement_reactions: [0, ratingValidators],
+      movement_balance: [0, ratingValidators],
+
+      power_shot_power: [0, ratingValidators],
+      power_jumping: [0, ratingValidators],
+      power_stamina: [0, ratingValidators],
+      power_strength: [0, ratingValidators],
+      power_long_shots: [0, ratingValidators],
+
+      mentality_aggression: [0, ratingValidators],
+      mentality_interceptions: [0, ratingValidators],
+      mentality_positioning: [0, ratingValidators],
+      mentality_vision: [0, ratingValidators],
+      mentality_penalties: [0, ratingValidators],
+      mentality_composure: [0, ratingValidators],
+
+      defending_marking: [0, ratingValidators],
+      defending_standing_tackle: [0, ratingValidators],
+      defending_sliding_tackle: [0, ratingValidators],
+
+      goalkeeping_diving: [0, ratingValidators],
+      goalkeeping_handling: [0, ratingValidators],
+      goalkeeping_kicking: [0, ratingValidators],
+      goalkeeping_positioning: [0, ratingValidators],
+      goalkeeping_reflexes: [0, ratingValidators],
+      goalkeeping_speed: [0, ratingValidators],
+
     });
   }
 
@@ -288,8 +320,14 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
   toggleEditMode(): void {
     this.isEditing = !this.isEditing;
 
-    if (!this.isEditing && this.player) {
-      this.playerForm.patchValue(this.player);
+    if (this.isEditing) {
+      this.playerForm.enable();
+    } else {
+      this.playerForm.disable();
+      this.playerForm.get('id')?.disable(); // mantener ID disabled
+      if (this.player) {
+        this.playerForm.patchValue(this.player);
+      }
     }
 
     if (this.isCreationMode && !this.isEditing) {

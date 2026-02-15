@@ -1,0 +1,44 @@
+<div class="info-card" [formGroup]="form">
+
+    <h3 class="section-title">Información Básica</h3>
+
+    <div class="info-fields">
+        <ng-container *ngFor="let field of fields">
+
+            <label [for]="field.key">{{ field.label }}</label>
+
+            <!-- SELECT -->
+            <select *ngIf="field.key === 'preferred_foot'" [formControlName]="field.key">
+                <option value="Left">Left</option>
+                <option value="Right">Right</option>
+            </select>
+
+            <!-- INPUT NORMAL -->
+            <input *ngIf="field.key !== 'preferred_foot'" [id]="field.key" [formControlName]="field.key"
+                [type]="field.type" [min]="field.min" [max]="field.max" />
+
+            <!-- ERRORES -->
+            <small class="error" *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+
+                <span *ngIf="form.get(field.key)?.errors?.['required']">
+                    Campo obligatorio
+                </span>
+
+                <span *ngIf="form.get(field.key)?.errors?.['min']">
+                    Valor demasiado bajo
+                </span>
+
+                <span *ngIf="form.get(field.key)?.errors?.['max']">
+                    Valor demasiado alto
+                </span>
+
+                <span *ngIf="form.get(field.key)?.errors?.['maxlength']">
+                    Texto demasiado largo
+                </span>
+
+            </small>
+
+        </ng-container>
+    </div>
+
+</div>
