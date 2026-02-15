@@ -3,85 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { PlayerModel } from '../../models/player';
+import { SkillGroupModel } from '../../models/skill-group';
 import { BasicInfoComponent } from './basic-info/basic-info';
 import { SkillsAnalysisComponent } from './skills-analysis/skills-analysis';
 import { SkillsEditorComponent } from './skills-editor/skills-editor';
 import { PlayerService } from '../../services/player';
 import { AuthService } from '../../services/auth';
-
-interface PlayerDetails {
-  id: number;
-  fifa_version: string;
-  fifa_update: string;
-  player_face_url: string;
-  long_name: string;
-  club_name: string;
-  player_positions: string;
-  nationality_name: string;
-  overall: number;
-  potential: number;
-  value_eur: number;
-  wage_eur: number;
-  age: number;
-  height_cm: number;
-  weight_kg: number;
-  preferred_foot: string;
-  weak_foot: number;
-  skill_moves: number;
-  international_reputation: number;
-  work_rate: string;
-  body_type: string;
-  pace: number;
-  shooting: number;
-  passing: number;
-  dribbling: number;
-  defending: number;
-  physic: number;
-  attacking_crossing: number;
-  attacking_finishing: number;
-  attacking_heading_accuracy: number;
-  attacking_short_passing: number;
-  attacking_volleys: number;
-  skill_dribbling: number;
-  skill_curve: number;
-  skill_fk_accuracy: number;
-  skill_long_passing: number;
-  skill_ball_control: number;
-  movement_acceleration: number;
-  movement_sprint_speed: number;
-  movement_agility: number;
-  movement_reactions: number;
-  movement_balance: number;
-  power_shot_power: number;
-  power_jumping: number;
-  power_stamina: number;
-  power_strength: number;
-  power_long_shots: number;
-  mentality_aggression: number;
-  mentality_interceptions: number;
-  mentality_positioning: number;
-  mentality_vision: number;
-  mentality_penalties: number;
-  mentality_composure: number;
-  defending_marking: number;
-  defending_standing_tackle: number;
-  defending_sliding_tackle: number;
-  goalkeeping_diving: number;
-  goalkeeping_handling: number;
-  goalkeeping_kicking: number;
-  goalkeeping_positioning: number;
-  goalkeeping_reflexes: number;
-  goalkeeping_speed: number;
-  player_traits: string;
-}
-
-interface SkillGroup {
-  title: string;
-  labels: string[]; // Nombres de las etiquetas para el gráfico (ej: 'Attacking Heading Accuracy')
-  keys: string[];   // Nombres de la propiedad en PlayerDetails (ej: 'attacking_heading_accuracy')
-  data: number[];   // El array de valores (ej: [90, 85, ...])
-  formFields: { key: string; label: string }[];
-}
 
 @Component({
   selector: 'app-player-detail',
@@ -97,13 +25,13 @@ interface SkillGroup {
   styleUrls: ['./player-detail.scss']
 })
 export class PlayerDetailComponent implements OnInit, OnDestroy {
-  player: PlayerDetails | null = null;
+  player: PlayerModel | null = null;
   loading = true;
   isSaving = false;
   isEditing = false;
   isCreationMode = false;
   playerForm!: FormGroup;
-  skillGroups: SkillGroup[] = [];
+  skillGroups: SkillGroupModel[] = [];
   id: number | null = null;
   basicInfoFields = [
     { key: 'id', label: 'ID', type: 'number', readonly: true },
@@ -272,7 +200,7 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
   }
 
   initializeSkillGroups(): void {
-    const groupsConfig: { title: string; keys: string[] }[] = [
+    const groupsConfig: { title: string; keys: (keyof PlayerModel)[] }[] = [
       {
         title: 'Core Attributes',
         keys: ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic']
@@ -471,9 +399,9 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  mapSkillsToCharts(player: PlayerDetails): void {
+  mapSkillsToCharts(player: PlayerModel): void {
     this.skillGroups.forEach(group => {
-      group.data = group.keys.map(key => (player as any)[key]);
+      group.data = group.keys.map(key => player[key] as number);
     });
   }
 
