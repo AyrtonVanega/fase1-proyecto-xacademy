@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Chart, registerables } from 'chart.js';
 import { BasicInfoComponent } from './basic-info/basic-info';
 import { SkillsAnalysisComponent } from './skills-analysis/skills-analysis';
+import { SkillsEditorComponent } from './skills-editor/skills-editor';
 import { PlayerService } from '../../services/player';
 import { AuthService } from '../../services/auth';
 
@@ -93,6 +94,7 @@ interface SkillGroup {
     ReactiveFormsModule,
     BasicInfoComponent,
     SkillsAnalysisComponent,
+    SkillsEditorComponent,
   ],
   templateUrl: './player-detail.html',
   styleUrls: ['./player-detail.scss']
@@ -273,23 +275,100 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
   }
 
   initializeSkillGroups(): void {
-    const config = [
-      { title: 'Core Attributes', keys: ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic'] },
-      { title: 'Attacking Skills', keys: ['attacking_crossing', 'attacking_finishing', 'attacking_heading_accuracy', 'attacking_short_passing', 'attacking_volleys'] },
-      { title: 'Technical Skills', keys: ['skill_dribbling', 'skill_curve', 'skill_fk_accuracy', 'skill_long_passing', 'skill_ball_control'] },
-      { title: 'Movement', keys: ['movement_acceleration', 'movement_sprint_speed', 'movement_agility', 'movement_reactions', 'movement_balance'] },
-      { title: 'Power', keys: ['power_shot_power', 'power_jumping', 'power_stamina', 'power_strength', 'power_long_shots'] },
-      { title: 'Mentality', keys: ['mentality_aggression', 'mentality_interceptions', 'mentality_positioning', 'mentality_vision', 'mentality_penalties', 'mentality_composure'] },
-      { title: 'Defending', keys: ['defending_marking', 'defending_standing_tackle', 'defending_sliding_tackle'] },
-      { title: 'Goalkeeping', keys: ['goalkeeping_diving', 'goalkeeping_handling', 'goalkeeping_kicking', 'goalkeeping_positioning', 'goalkeeping_reflexes', 'goalkeeping_speed'] },
+    const groupsConfig: { title: string; keys: string[] }[] = [
+      {
+        title: 'Core Attributes',
+        keys: ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic']
+      },
+      {
+        title: 'Attacking Skills',
+        keys: [
+          'attacking_crossing',
+          'attacking_finishing',
+          'attacking_heading_accuracy',
+          'attacking_short_passing',
+          'attacking_volleys'
+        ]
+      },
+      {
+        title: 'Technical Skills',
+        keys: [
+          'skill_dribbling',
+          'skill_curve',
+          'skill_fk_accuracy',
+          'skill_long_passing',
+          'skill_ball_control'
+        ]
+      },
+      {
+        title: 'Movement',
+        keys: [
+          'movement_acceleration',
+          'movement_sprint_speed',
+          'movement_agility',
+          'movement_reactions',
+          'movement_balance'
+        ]
+      },
+      {
+        title: 'Power',
+        keys: [
+          'power_shot_power',
+          'power_jumping',
+          'power_stamina',
+          'power_strength',
+          'power_long_shots'
+        ]
+      },
+      {
+        title: 'Mentality',
+        keys: [
+          'mentality_aggression',
+          'mentality_interceptions',
+          'mentality_positioning',
+          'mentality_vision',
+          'mentality_penalties',
+          'mentality_composure'
+        ]
+      },
+      {
+        title: 'Defending',
+        keys: [
+          'defending_marking',
+          'defending_standing_tackle',
+          'defending_sliding_tackle'
+        ]
+      },
+      {
+        title: 'Goalkeeping',
+        keys: [
+          'goalkeeping_diving',
+          'goalkeeping_handling',
+          'goalkeeping_kicking',
+          'goalkeeping_positioning',
+          'goalkeeping_reflexes',
+          'goalkeeping_speed'
+        ]
+      }
     ];
 
-    this.skillGroups = config.map(group => ({
+    this.skillGroups = groupsConfig.map(group => ({
       title: group.title,
-      labels: group.keys.map(k => this.formatLabel(k)),
+
+      // Para el gráfico radar
+      labels: group.keys.map(key => this.formatLabel(key)),
+
+      // Para mapear valores dinámicos
       keys: group.keys,
-      data: [],
-      formFields: group.keys.map(k => ({ key: k, label: this.formatLabel(k) })),
+
+      // Se llena cuando se carga el jugador
+      data: group.keys.map(() => 0),
+
+      // Para el editor
+      formFields: group.keys.map(key => ({
+        key,
+        label: this.formatLabel(key)
+      }))
     }));
   }
 

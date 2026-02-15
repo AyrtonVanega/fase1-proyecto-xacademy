@@ -30,36 +30,18 @@
 
         <div class="form-layout">
             <!-- Informacion Basica -->
-            <app-basic-info [form]="playerForm" [fields]="basicInfoFields" [isEditing]="isEditing">
+            <app-basic-info *ngIf="player || isCreationMode" [form]="playerForm" [fields]="basicInfoFields" [isEditing]="isEditing">
             </app-basic-info>
 
-
             <!-- LADO DERECHO -->
-            <div class="skills-container" *ngIf="isEditing || player">
+            <!-- Edicion de Habilidades (modo Edicion / Creacion) -->
+            <app-skills-editor *ngIf="isEditing || isCreationMode" [form]="playerForm" [skillGroups]="skillGroups"
+                [isEditing]="isEditing">
+            </app-skills-editor>
 
-                <!-- Titulo Dinamico (modo Vista / Edicion - Creacion) -->
-                <h3 class="section-title" *ngIf="isEditing">
-                    Ajuste de Habilidades (0-100)
-                </h3>
-
-                <!-- Edicion de Habilidades (modo Edicion / Creacion) -->
-                <div *ngIf="isEditing" class="skills-grid">
-                    <div *ngFor="let group of skillGroups" class="skill-group">
-                        <h4>{{ group.title }}</h4>
-                        <div class="skill-fields">
-                            <div *ngFor="let field of group.formFields" class="skill-field">
-                                <label>{{ field.label }}</label>
-                                <input [formControlName]="field.key" type="number" min="0" max="100"
-                                    [ngClass]="{'invalid': playerForm.get(field.key)?.invalid && playerForm.get(field.key)?.touched}" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Vista de Graficos (modo Vista) -->
-                <app-skills-analysis *ngIf="!isEditing && player" [skillGroups]="skillGroups">
-                </app-skills-analysis>
-            </div>
+            <!-- Vista de Graficos (modo Vista) -->
+            <app-skills-analysis *ngIf="!isEditing && player" [skillGroups]="skillGroups">
+            </app-skills-analysis>
         </div>
     </div>
 

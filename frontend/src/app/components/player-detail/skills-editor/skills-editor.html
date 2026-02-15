@@ -1,0 +1,40 @@
+<div class="skills-container" [formGroup]="form">
+
+    <h3 class="section-title">Ajuste de Habilidades (0-100)</h3>
+
+    <div class="skills-grid">
+
+        <div *ngFor="let group of skillGroups" class="skill-group">
+
+            <h4>{{ group.title }}</h4>
+
+            <div class="skill-fields">
+
+                <div *ngFor="let field of group.formFields" class="skill-field">
+
+                    <label>{{ field.label }}</label>
+                    <input [formControlName]="field.key" type="number" min="0" max="100" />
+
+                    <!-- ERRORES -->
+                    <small class="error" *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+
+                        <span *ngIf="form.get(field.key)?.errors?.['required']">
+                            Campo obligatorio
+                        </span>
+
+                        <span *ngIf="form.get(field.key)?.errors?.['min']">
+                            Mínimo 0
+                        </span>
+
+                        <span *ngIf="form.get(field.key)?.errors?.['max']">
+                            Máximo 100
+                        </span>
+
+                    </small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
