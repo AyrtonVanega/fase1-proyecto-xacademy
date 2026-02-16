@@ -88,3 +88,5 @@ export const PLAYER_SKILLS_CONFIG: SkillGroupConfig[] = [
         ]
     }
 ];
+
+export const ALL_SKILL_KEYS = PLAYER_SKILLS_CONFIG.flatMap(group => group.keys);

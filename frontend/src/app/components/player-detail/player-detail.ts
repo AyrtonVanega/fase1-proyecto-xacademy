@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PlayerModel } from '../../models/player';
 import { SkillGroupModel } from '../../models/skill-group';
@@ -11,6 +11,7 @@ import { SkillsEditorComponent } from './skills-editor/skills-editor';
 import { PlayerService } from '../../services/player';
 import { AuthService } from '../../services/auth';
 import { PLAYER_SKILLS_CONFIG } from '../../config/player-skill';
+import { buildPlayerForm } from '../../factories/player-form';
 
 @Component({
   selector: 'app-player-detail',
@@ -68,7 +69,7 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private fb: FormBuilder,
   ) {
-    this.initForm();
+    this.playerForm = buildPlayerForm(this.fb);
     this.initializeSkillGroups();
   }
 
@@ -100,104 +101,6 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
     if (this.playerSubscription) {
       this.playerSubscription.unsubscribe();
     }
-  }
-
-  /** Inicializa el formulario */
-  initForm(): void {
-    const ratingValidators = [
-      Validators.required,
-      Validators.min(0),
-      Validators.max(100)
-    ];
-
-    const smallRatingValidators = [
-      Validators.min(1),
-      Validators.max(5)
-    ];
-
-    this.playerForm = this.fb.group({
-      id: [{ value: 0, disabled: true }], // readonly
-
-      fifa_version: ['', [Validators.required, Validators.maxLength(255)]],
-      fifa_update: ['', [Validators.required, Validators.maxLength(255)]],
-      player_face_url: ['', [Validators.required, Validators.pattern(/https?:\/\/.+/)]],
-      long_name: ['', [Validators.required, Validators.maxLength(255)]],
-      player_positions: ['', Validators.required],
-
-      club_name: ['', Validators.maxLength(255)],
-      nationality_name: ['', Validators.maxLength(255)],
-
-      overall: [0, ratingValidators],
-      potential: [0, ratingValidators],
-
-      value_eur: [0, [Validators.min(0)]],
-      wage_eur: [0, [Validators.min(0)]],
-
-      age: [18, [Validators.required, Validators.min(15), Validators.max(60)]],
-      height_cm: [170, [Validators.min(120), Validators.max(230)]],
-      weight_kg: [70, [Validators.min(40), Validators.max(150)]],
-
-      preferred_foot: ['Left', Validators.required],
-
-      weak_foot: [1, smallRatingValidators],
-      skill_moves: [1, smallRatingValidators],
-      international_reputation: [1, smallRatingValidators],
-
-      work_rate: ['', Validators.maxLength(255)],
-      body_type: ['', Validators.maxLength(255)],
-      player_traits: ['', Validators.maxLength(255)],
-
-      // Skills 0–100
-      pace: [0, ratingValidators],
-      shooting: [0, ratingValidators],
-      passing: [0, ratingValidators],
-      dribbling: [0, ratingValidators],
-      defending: [0, ratingValidators],
-      physic: [0, ratingValidators],
-
-      attacking_crossing: [0, ratingValidators],
-      attacking_finishing: [0, ratingValidators],
-      attacking_heading_accuracy: [0, ratingValidators],
-      attacking_short_passing: [0, ratingValidators],
-      attacking_volleys: [0, ratingValidators],
-
-      skill_dribbling: [0, ratingValidators],
-      skill_curve: [0, ratingValidators],
-      skill_fk_accuracy: [0, ratingValidators],
-      skill_long_passing: [0, ratingValidators],
-      skill_ball_control: [0, ratingValidators],
-
-      movement_acceleration: [0, ratingValidators],
-      movement_sprint_speed: [0, ratingValidators],
-      movement_agility: [0, ratingValidators],
-      movement_reactions: [0, ratingValidators],
-      movement_balance: [0, ratingValidators],
-
-      power_shot_power: [0, ratingValidators],
-      power_jumping: [0, ratingValidators],
-      power_stamina: [0, ratingValidators],
-      power_strength: [0, ratingValidators],
-      power_long_shots: [0, ratingValidators],
-
-      mentality_aggression: [0, ratingValidators],
-      mentality_interceptions: [0, ratingValidators],
-      mentality_positioning: [0, ratingValidators],
-      mentality_vision: [0, ratingValidators],
-      mentality_penalties: [0, ratingValidators],
-      mentality_composure: [0, ratingValidators],
-
-      defending_marking: [0, ratingValidators],
-      defending_standing_tackle: [0, ratingValidators],
-      defending_sliding_tackle: [0, ratingValidators],
-
-      goalkeeping_diving: [0, ratingValidators],
-      goalkeeping_handling: [0, ratingValidators],
-      goalkeeping_kicking: [0, ratingValidators],
-      goalkeeping_positioning: [0, ratingValidators],
-      goalkeeping_reflexes: [0, ratingValidators],
-      goalkeeping_speed: [0, ratingValidators],
-
-    });
   }
 
   initializeSkillGroups(): void {
