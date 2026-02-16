@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PlayerModel } from '../../models/player';
 import { SkillGroupModel } from '../../models/skill-group';
 import { BasicInfoComponent } from './basic-info/basic-info';
@@ -26,7 +26,7 @@ import { buildPlayerForm } from '../../factories/player-form';
   templateUrl: './player-detail.html',
   styleUrls: ['./player-detail.scss']
 })
-export class PlayerDetailComponent implements OnInit, OnDestroy {
+export class PlayerDetailComponent implements OnInit {
   player: PlayerModel | null = null;
   loading = true;
   isSaving = false;
@@ -60,7 +60,7 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
     { key: 'player_traits', label: 'Rasgos del Jugador', type: 'text' },
   ];
 
-  private playerSubscription: Subscription | null = null;
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     private route: ActivatedRoute,
@@ -97,12 +97,6 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    if (this.playerSubscription) {
-      this.playerSubscription.unsubscribe();
-    }
-  }
-
   initializeSkillGroups(): void {
     this.skillGroups = PLAYER_SKILLS_CONFIG.map(group => ({
       title: group.title,
@@ -130,20 +124,21 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
 
   loadPlayer(id: number): void {
     this.loading = true;
-    if (this.playerSubscription) this.playerSubscription.unsubscribe();
 
-    this.playerSubscription = this.playerService.getById(id).subscribe({
-      next: data => {
-        this.player = data;
-        this.playerForm.patchValue(data);
-        this.mapSkillsToCharts(data);
-        this.loading = false;
-      },
-      error: err => {
-        console.error('Error al cargar jugador:', err);
-        this.loading = false;
-      }
-    });
+    this.playerService.getById(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: data => {
+          this.player = data;
+          this.playerForm.patchValue(data);
+          this.mapSkillsToCharts(data);
+          this.loading = false;
+        },
+        error: err => {
+          console.error('Error al cargar jugador:', err);
+          this.loading = false;
+        }
+      });
   }
 
   toggleEditMode(): void {
