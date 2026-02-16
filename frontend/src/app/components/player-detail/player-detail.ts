@@ -164,27 +164,6 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  isFormValid(): boolean {
-    if (!this.playerForm) return false;
-
-    const requiredFields = [
-      'fifa_version',
-      'fifa_update',
-      'player_face_url',
-      'long_name',
-      'player_positions',
-      'overall',
-      'potential',
-      'age'
-    ];
-
-    return requiredFields.every(field => {
-      const control = this.playerForm.get(field);
-      return control && control.value !== null && control.value !== '';
-    });
-  }
-
-
   savePlayer(): void {
     if (this.playerForm.invalid) {
       this.playerForm.markAllAsTouched();
