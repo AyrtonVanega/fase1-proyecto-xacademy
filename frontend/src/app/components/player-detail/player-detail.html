@@ -1,10 +1,10 @@
 <div class="player-detail-container">
-    <!-- Titulo de la pagina segun el modo (modo Creacion / Vista) -->
+    <!-- Titulo de la pagina segun el modo (modo Creacion / Vista / Edicion) -->
     <h2 class="page-title">
-        {{ isCreationMode ? 'Crear Nuevo Jugador' : (isEditing ? 'Editar Jugador' : 'Detalle del Jugador') }}
+        {{ isCreateMode ? 'Crear Nuevo Jugador' : (isEditMode ? 'Editar Jugador' : 'Detalle del Jugador') }}
     </h2>
 
-    <div *ngIf="!loading && (player || isCreationMode)" [formGroup]="playerForm">
+    <div *ngIf="!loading && (player || isCreateMode)" [formGroup]="playerForm">
 
         <!-- Seccion de encabezado con nombre y botones -->
         <div class="header-section">
@@ -14,13 +14,13 @@
             <div class="actions">
 
                 <!-- Botones Editar / Volver (modo Vista) -->
-                <div *ngIf="!isCreationMode && !isEditing" class="edit-back-buttons">
+                <div *ngIf="isViewMode" class="edit-back-buttons">
                     <button (click)="toggleEditMode()" class="btn btn-edit">Editar</button>
                     <button (click)="goBack()" class="btn btn-back">Volver</button>
                 </div>
 
                 <!-- Boton Guardar y Cancelar (modo Edicion / Creacion) -->
-                <div *ngIf="isEditing || isCreationMode" class="save-cancel-buttons">
+                <div *ngIf="isEditMode || isCreateMode" class="save-cancel-buttons">
                     <button (click)="savePlayer()" class="btn btn-save" [disabled]="isSaving">Guardar</button>
                     <button (click)="toggleEditMode()" class="btn btn-cancel" [disabled]="isSaving">Cancelar</button>
                 </div>
@@ -30,23 +30,24 @@
 
         <div class="form-layout">
             <!-- Informacion Basica -->
-            <app-basic-info *ngIf="player || isCreationMode" [form]="playerForm" [fields]="basicInfoFields" [isEditing]="isEditing">
+            <app-basic-info *ngIf="player || isCreateMode" [form]="playerForm" [fields]="basicInfoFields"
+                [isEditing]="isEditMode">
             </app-basic-info>
 
             <!-- LADO DERECHO -->
             <!-- Edicion de Habilidades (modo Edicion / Creacion) -->
-            <app-skills-editor *ngIf="isEditing || isCreationMode" [form]="playerForm" [skillGroups]="skillGroups"
-                [isEditing]="isEditing">
+            <app-skills-editor *ngIf="isEditMode || isCreateMode" [form]="playerForm" [skillGroups]="skillGroups"
+                [isEditing]="isEditMode">
             </app-skills-editor>
 
             <!-- Vista de Graficos (modo Vista) -->
-            <app-skills-analysis *ngIf="!isEditing && player" [skillGroups]="skillGroups">
+            <app-skills-analysis *ngIf="isViewMode && player" [skillGroups]="skillGroups">
             </app-skills-analysis>
         </div>
     </div>
 
     <!-- Mensaje de Error -->
-    <div *ngIf="!loading && !player && !isCreationMode" class="error-message">
+    <div *ngIf="!loading && !player && !isCreateMode" class="error-message">
         <p>Jugador no encontrado</p>
     </div>
 </div>

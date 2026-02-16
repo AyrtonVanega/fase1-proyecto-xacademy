@@ -29,11 +29,10 @@ export class PlayerDetailComponent implements OnInit {
   player: PlayerModel | null = null;
   loading = true;
   isSaving = false;
-  isEditing = false;
-  isCreationMode = false;
   playerForm!: FormGroup;
   skillGroups: SkillGroupModel[] = [];
   id: number | null = null;
+  mode: 'view' | 'edit' | 'create' = 'view';
   basicInfoFields = [
     { key: 'id', label: 'ID', type: 'number', readonly: true },
     { key: 'long_name', label: 'Nombre Completo', type: 'text' },
@@ -71,20 +70,33 @@ export class PlayerDetailComponent implements OnInit {
     this.initializeSkillGroups();
   }
 
+  get isEditMode(): boolean {
+    return this.mode === 'edit';
+  }
+
+  get isCreateMode(): boolean {
+    return this.mode === 'create';
+  }
+
+  get isViewMode(): boolean {
+    return this.mode === 'view';
+  }
+
+  // El componente puede iniciar en modo vista (con ID) o en modo creación (sin ID)
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
 
     if (idParam) {
       // Modo Vista
       this.id = Number(idParam);
-      this.isCreationMode = false;
+      this.mode = 'view';
       this.playerForm.disable();
-      this.playerForm.get('id')?.disable();
       this.loadPlayer(this.id);
     } else {
-      // Modo Creación/Edicion
-      this.isCreationMode = true;
-      this.isEditing = true;
+      // Modo Creación
+      this.mode = 'create';
+      this.playerForm.enable();
+      this.playerForm.get('id')?.disable();
       this.loading = false;
     }
   }
@@ -134,20 +146,25 @@ export class PlayerDetailComponent implements OnInit {
   }
 
   toggleEditMode(): void {
-    this.isEditing = !this.isEditing;
+    switch (this.mode) {
 
-    if (this.isEditing) {
-      this.playerForm.enable();
-    } else {
-      this.playerForm.disable();
-      this.playerForm.get('id')?.disable(); // mantener ID disabled
-      if (this.player) {
-        this.playerForm.patchValue(this.player);
-      }
-    }
+      case 'view':
+        this.mode = 'edit';
+        this.playerForm.enable();
+        this.playerForm.get('id')?.disable();
+        break;
 
-    if (this.isCreationMode && !this.isEditing) {
-      this.router.navigate(['/players']);
+      case 'edit':
+        this.mode = 'view';
+        this.playerForm.disable();
+        if (this.player) {
+          this.playerForm.patchValue(this.player);
+        }
+        break;
+
+      case 'create':
+        this.router.navigate(['/players']);
+        break;
     }
   }
 
@@ -158,38 +175,46 @@ export class PlayerDetailComponent implements OnInit {
     }
 
     this.isSaving = true;
-    const data = this.playerForm.value;
 
-    const operation = this.isCreationMode
-      ? this.playerService.createPlayer(data)
-      : this.playerService.updatePlayer(this.id!, data);
+    const payload = this.playerForm.getRawValue();
 
-    operation.subscribe({
-      next: (response: any) => {
-        const player = response.jugador || response;
-        if (!player?.id) {
-          console.error('No se obtuvo "id" en la respuesta. Respuesta completa:', response);
-          this.isSaving = false;
-          return;
-        }
+    const request$ =
+      this.mode === 'create'
+        ? this.playerService.createPlayer(payload)
+        : this.playerService.updatePlayer(this.id!, payload);
 
-        this.player = player;
-        this.playerForm.patchValue(player);
-        this.isSaving = false;
-        this.isEditing = false;
-        this.mapSkillsToCharts(player);
-
-        // Redirige automaticamente al detalle del nuevo jugador
-        if (this.isCreationMode) {
-          this.router.navigate([`/players/${player.id}`]);
-        }
-      },
-
-      error: err => {
-        console.error('Error al guardar jugador:', err);
-        this.isSaving = false;
-      }
+    request$.subscribe({
+      next: (response) => this.handleSaveSuccess(response),
+      error: (err) => this.handleSaveError(err)
     });
+  }
+
+  private handleSaveSuccess(response: any): void {
+    const player = response.jugador || response;
+
+    if (!player?.id) {
+      console.error('No se obtuvo id en la respuesta:', response);
+      this.isSaving = false;
+      return;
+    }
+
+    this.player = player;
+    this.playerForm.patchValue(player);
+    this.mapSkillsToCharts(player);
+
+    if (this.mode === 'create') {
+      this.router.navigate([`/players/${player.id}`]);
+    } else {
+      this.mode = 'view';
+      this.playerForm.disable();
+    }
+
+    this.isSaving = false;
+  }
+
+  private handleSaveError(error: any): void {
+    console.error('Error al guardar jugador:', error);
+    this.isSaving = false;
   }
 
   mapSkillsToCharts(player: PlayerModel): void {
