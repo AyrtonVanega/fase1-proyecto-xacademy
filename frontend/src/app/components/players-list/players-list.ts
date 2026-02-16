@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PlayerService } from '../../services/player';
-import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-players-list',
@@ -34,16 +33,9 @@ export class PlayersListComponent implements OnInit {
 
   constructor(
     private playerService: PlayerService,
-    private authService: AuthService,
     private router: Router) { }
 
   ngOnInit(): void {
-    // Si no hay token, redirige al login
-    if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
     this.loadPlayers();
   }
 

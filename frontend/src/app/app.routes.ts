@@ -1,14 +1,43 @@
 import { Routes } from '@angular/router';
-import { PlayersListComponent } from './components/players-list/players-list';
-import { PlayerDetailComponent } from './components/player-detail/player-detail';
 import { LoginComponent } from './components/login/login';
 import { HomeComponent } from './components/home/home';
+import { authGuard } from './guards/auth';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'players', component: PlayersListComponent },
-  { path: 'players/create', component: PlayerDetailComponent },
-  { path: 'players/:id', component: PlayerDetailComponent },
-  { path: '**', redirectTo: '' },
+  {
+    path: '',
+    component: HomeComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'players',
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./components/players-list/players-list')
+            .then(m => m.PlayersListComponent)
+      },
+      {
+        path: 'create',
+        loadComponent: () =>
+          import('./components/player-detail/player-detail')
+            .then(m => m.PlayerDetailComponent)
+      },
+      {
+        path: ':id',
+        loadComponent: () =>
+          import('./components/player-detail/player-detail')
+            .then(m => m.PlayerDetailComponent)
+      }
+    ]
+  },
+  {
+    path: '**',
+    redirectTo: ''
+  },
 ];

@@ -9,7 +9,6 @@ import { BasicInfoComponent } from './basic-info/basic-info';
 import { SkillsAnalysisComponent } from './skills-analysis/skills-analysis';
 import { SkillsEditorComponent } from './skills-editor/skills-editor';
 import { PlayerService } from '../../services/player';
-import { AuthService } from '../../services/auth';
 import { PLAYER_SKILLS_CONFIG } from '../../config/player-skill';
 import { buildPlayerForm } from '../../factories/player-form';
 
@@ -66,7 +65,6 @@ export class PlayerDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private playerService: PlayerService,
-    private authService: AuthService,
     private fb: FormBuilder,
   ) {
     this.playerForm = buildPlayerForm(this.fb);
@@ -74,12 +72,6 @@ export class PlayerDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Si no hay token, redirige al login
-    if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
     const idParam = this.route.snapshot.paramMap.get('id');
 
     if (idParam) {
