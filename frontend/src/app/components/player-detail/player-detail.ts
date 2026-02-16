@@ -34,7 +34,6 @@ export class PlayerDetailComponent implements OnInit {
   id: number | null = null;
   mode: 'view' | 'edit' | 'create' = 'view';
   basicInfoFields = [
-    { key: 'id', label: 'ID', type: 'number', readonly: true },
     { key: 'long_name', label: 'Nombre Completo', type: 'text' },
     { key: 'age', label: 'Edad', type: 'number', min: 0, max: 100 },
     { key: 'nationality_name', label: 'Nacionalidad', type: 'text' },
@@ -96,7 +95,6 @@ export class PlayerDetailComponent implements OnInit {
       // Modo Creación
       this.mode = 'create';
       this.playerForm.enable();
-      this.playerForm.get('id')?.disable();
       this.loading = false;
     }
   }
@@ -151,7 +149,6 @@ export class PlayerDetailComponent implements OnInit {
       case 'view':
         this.mode = 'edit';
         this.playerForm.enable();
-        this.playerForm.get('id')?.disable();
         break;
 
       case 'edit':

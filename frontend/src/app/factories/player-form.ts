@@ -20,7 +20,6 @@ export function buildPlayerForm(fb: FormBuilder): FormGroup {
     }, {} as Record<string, any>);
 
     return fb.group({
-        id: [{ value: 0, disabled: true }],
 
         fifa_version: ['', [Validators.required, Validators.maxLength(255)]],
         fifa_update: ['', [Validators.required, Validators.maxLength(255)]],
