@@ -25,4 +25,15 @@ async function crearJugador(data) {
   return await playerProvider.createPlayer(data);
 }
 
-module.exports = { buscarTodos, exportarJugadores, buscarPorId, actualizarJugador, crearJugador };
+async function obtenerTimelineHabilidades(id, skills) {
+  const basePlayer = await playerProvider.findById(id);
+  if (!basePlayer) return null;
+
+  return await playerProvider.findVersionsByPlayerIdentity(
+    basePlayer.long_name,
+    basePlayer.nationality_name,
+    ["fifa_version", ...skills]
+  );
+}
+
+module.exports = { buscarTodos, exportarJugadores, buscarPorId, actualizarJugador, crearJugador, obtenerTimelineHabilidades };

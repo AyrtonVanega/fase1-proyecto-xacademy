@@ -12,6 +12,9 @@ router.get("/", playerController.listPlayers);
 // Export del listado filtrado a XLSX
 router.get("/export", playerController.exportPlayers);
 
+// Timeline de habilidades
+router.get("/:id/skills/timeline", playerController.getSkillTimeline);
+
 // Obtener jugador por ID
 router.get("/:id", playerController.getPlayerById);
 

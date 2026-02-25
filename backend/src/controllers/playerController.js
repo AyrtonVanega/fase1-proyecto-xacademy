@@ -1,5 +1,6 @@
 const playerService = require("../services/playerService");
 const { sendXlsx } = require("../utils/exportXlsx");
+const SkillTimelineDTO = require("../dtos/skillTimeLineDto");
 
 /**
  * Devuelve todos los jugadores, filtrando por nombre si se especifica.
@@ -107,4 +108,38 @@ const createPlayer = async (req, res) => {
   }
 };
 
-module.exports = { listPlayers, exportPlayers, getPlayerById, updatePlayer, createPlayer };
+const getSkillTimeline = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { skills } = req.query;
+
+    if (!skills) {
+      return res.status(400).json({
+        message: "Query param 'skills' is required"
+      });
+    }
+
+    const skillsArray = skills.split(",");
+
+    const records = await playerService.obtenerTimelineHabilidades(
+      id,
+      skillsArray
+    );
+
+    if (!records) {
+      return res.status(404).json({
+        message: "Player not found"
+      });
+    }
+
+    const response = SkillTimelineDTO.build(id, records, skillsArray);
+
+    res.json(response);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = { listPlayers, exportPlayers, getPlayerById, updatePlayer, createPlayer, getSkillTimeline };

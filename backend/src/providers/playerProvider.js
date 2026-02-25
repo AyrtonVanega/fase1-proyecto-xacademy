@@ -104,4 +104,21 @@ async function createPlayer(data) {
   }
 }
 
-module.exports = { findPaginated, findAllFiltered, findById, updateById, createPlayer };
+async function findVersionsByPlayerIdentity(name, nationality, attributes) {
+  try {
+    return await Player.findAll({
+      where: {
+        long_name: name,
+        nationality_name: nationality
+      },
+      attributes,
+      order: [["fifa_version", "ASC"]],
+      raw: true
+    });
+  } catch (err) {
+    console.error("Error en PlayerProvider.findVersionsByPlayerIdentity:", err);
+    throw err;
+  }
+}
+
+module.exports = { findPaginated, findAllFiltered, findById, updateById, createPlayer, findVersionsByPlayerIdentity };
