@@ -1,0 +1,38 @@
+<div class="player-skill-timeline-container">
+
+    <!-- Cargando jugador -->
+    <div *ngIf="playerLoading">
+        <h2>Timeline de Habilidades</h2>
+        <p>Cargando jugador...</p>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="!playerLoading && !player">
+        <h2>Jugador no encontrado</h2>
+    </div>
+
+    <!-- Jugador cargado -->
+    <div *ngIf="!playerLoading && player">
+
+        <h2 class="timeline-title">
+            Timeline de Habilidades para {{ player.long_name }}
+        </h2>
+
+        <button class="btn btn-back" (click)="goBack()">Volver</button>
+
+        <!-- Selector -->
+        <app-skill-selector [skillGroups]="skillGroups" [selectedSkills]="selectedSkills"
+            (skillToggle)="onSkillToggle($event)">
+        </app-skill-selector>
+
+        <app-skill-timeline-chart [series]="chartData" [loading]="timelineLoading">
+        </app-skill-timeline-chart>
+
+        <!-- Loader del timeline -->
+        <div *ngIf="timelineLoading">
+            Cargando datos...
+        </div>
+
+    </div>
+
+</div>

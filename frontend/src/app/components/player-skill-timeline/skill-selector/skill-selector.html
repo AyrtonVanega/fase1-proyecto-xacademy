@@ -1,0 +1,19 @@
+<div class="skill-selector">
+
+    <div *ngFor="let group of skillGroups; trackBy: trackByGroup" class="skill-group">
+        <h4 class="group-title">{{ group.title }}</h4>
+
+        <div class="skills-container">
+
+            <label *ngFor="let skill of group.keys; trackBy: trackBySkill" class="skill-checkbox">
+
+                <input type="checkbox" [checked]="isSelected(skill)" (change)="onToggle(skill)" />
+
+                <span>{{ skill | titlecase }}</span>
+
+            </label>
+
+        </div>
+    </div>
+
+</div>

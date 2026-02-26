@@ -33,6 +33,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./components/player-detail/player-detail')
             .then(m => m.PlayerDetailComponent)
+      },
+      {
+        path: ':id/skills/timeline',
+        loadComponent: () =>
+          import('./components/player-skill-timeline/player-skill-timeline')
+            .then(m => m.PlayerSkillTimelineComponent)
       }
     ]
   },

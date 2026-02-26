@@ -1,0 +1,51 @@
+.skill-selector {
+    margin-top: 1.5rem;
+}
+
+.skill-group {
+    max-width: 280px;
+    margin-bottom: 1.8rem;
+    padding: 1rem 1.2rem;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+}
+
+.group-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.4rem;
+}
+
+.skills-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.skill-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.35rem 0.4rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.skill-checkbox:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.skill-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #4da3ff;
+    cursor: pointer;
+}
+
+.skill-checkbox span {
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+}

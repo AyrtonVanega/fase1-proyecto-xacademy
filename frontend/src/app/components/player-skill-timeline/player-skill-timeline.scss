@@ -1,4 +1,4 @@
-.player-detail-container {
+.player-skill-timeline-container {
     max-width: 1500px;
     margin: 2rem auto;
     padding: 2rem;
@@ -22,12 +22,7 @@
     }
 
     /* Botones de acción global */
-    .edit-back-buttons,
-    .btn-cancel,
-    .btn-back,
-    .btn-edit,
-    .btn-timeline,
-    .btn-save {
+    .btn-back {
         display: inline-block;
         padding: 0.5rem 1rem;
         border-radius: 6px;
@@ -39,17 +34,7 @@
         transition: background-color 0.3s, transform 0.1s;
     }
 
-    .btn-edit {
-        background-color: #4a90e2;
-        color: #fff;
-
-        &:hover {
-            background-color: #50c878;
-        }
-    }
-
-    .btn-back,
-    .btn-cancel {
+    .btn-back {
         background-color: #ff6b6b;
         color: #fff;
 
@@ -58,31 +43,9 @@
         }
     }
 
-    .btn-timeline,
-    .btn-save {
-        background-color: #50c878;
-        color: #fff;
-
-        &:hover {
-            background-color: #4a90e2;
-        }
-    }
-
     .error-message {
         text-align: center;
         color: #ff6b6b;
         margin-top: 1rem;
-    }
-}
-
-/* Apilar columnas en pantallas chicas */
-@media (max-width: 900px) {
-    .player-detail-container .form-layout {
-        flex-direction: column;
-    }
-
-    .skills-container .charts-grid {
-        grid-template-columns: 1fr;
-        /* un gráfico por fila */
     }
 }

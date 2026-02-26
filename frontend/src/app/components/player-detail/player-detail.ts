@@ -202,4 +202,8 @@ export class PlayerDetailComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/players']);
   }
+
+  goToSkillTimeline(): void {
+    this.router.navigate([`/players/${this.id}/skills/timeline`]);
+  }
 }

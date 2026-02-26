@@ -59,4 +59,12 @@ export class PlayerService {
   createPlayer(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}`, data, { headers: this.getHeaders() });
   }
+
+  getSkillTimeline(id: number, skills: string[]): Observable<any> {
+    const skillsParam = skills.join(',');
+    return this.http.get(`${this.apiUrl}/${id}/skills/timeline`, {
+      headers: this.getHeaders(),
+      params: new HttpParams().set('skills', skillsParam)
+    });
+  }
 }

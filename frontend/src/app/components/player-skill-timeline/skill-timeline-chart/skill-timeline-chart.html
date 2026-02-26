@@ -1,0 +1,13 @@
+<div class="chart-wrapper">
+
+    <div *ngIf="loading" class="chart-loading">
+        Cargando gráfico...
+    </div>
+
+    <canvas #canvas></canvas>
+
+    <div *ngIf="!loading && !series.length" class="chart-empty">
+        Seleccioná al menos una skill.
+    </div>
+
+</div>
