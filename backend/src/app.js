@@ -11,6 +11,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Para recibir el csv como form-data
+app.use(express.urlencoded({ extended: true }));
+
 // Rutas
 app.use("/api/auth", authRoutes);
 app.use("/api/players", playerRoutes);

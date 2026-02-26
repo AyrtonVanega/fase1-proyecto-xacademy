@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const playerController = require("../controllers/playerController");
-const { authMiddleware } = require("../middleware");
+const { authMiddleware, uploadMiddleware } = require("../middleware");
 
 // Todas las rutas debajo de esto requieren token
 router.use(authMiddleware);
@@ -11,6 +11,13 @@ router.get("/", playerController.listPlayers);
 
 // Export del listado filtrado a XLSX
 router.get("/export", playerController.exportPlayers);
+
+// Import CSV
+router.post(
+    "/import",
+    uploadMiddleware.single("file"),
+    playerController.importPlayers
+);
 
 // Timeline de habilidades
 router.get("/:id/skills/timeline", playerController.getSkillTimeline);

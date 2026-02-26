@@ -142,4 +142,20 @@ const getSkillTimeline = async (req, res) => {
   }
 };
 
-module.exports = { listPlayers, exportPlayers, getPlayerById, updatePlayer, createPlayer, getSkillTimeline };
+const importPlayers = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const result = await playerService.importarJugadores(req.file.buffer);
+
+    return res.status(201).json(result);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error importing players" });
+  }
+};
+
+module.exports = { listPlayers, exportPlayers, getPlayerById, updatePlayer, createPlayer, getSkillTimeline, importPlayers };

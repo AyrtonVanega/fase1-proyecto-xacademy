@@ -121,4 +121,27 @@ async function findVersionsByPlayerIdentity(name, nationality, attributes) {
   }
 }
 
-module.exports = { findPaginated, findAllFiltered, findById, updateById, createPlayer, findVersionsByPlayerIdentity };
+async function bulkInsert(players) {
+  try {
+    const chunkSize = 1000;
+    let totalInserted = 0;
+
+    for (let i = 0; i < players.length; i += chunkSize) {
+      const chunk = players.slice(i, i + chunkSize);
+
+      const result = await Player.bulkCreate(chunk, {
+        validate: true,
+        ignoreDuplicates: true
+      });
+
+      totalInserted += result.length;
+    }
+
+    return totalInserted;
+  } catch (err) {
+    console.error("Error en PlayerProvider.bulkInsert:", err);
+    throw err;
+  }
+}
+
+module.exports = { findPaginated, findAllFiltered, findById, updateById, createPlayer, findVersionsByPlayerIdentity, bulkInsert };
