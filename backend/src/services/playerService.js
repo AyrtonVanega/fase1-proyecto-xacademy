@@ -1,4 +1,5 @@
 const playerProvider = require("../providers/playerProvider");
+const playerMapper = require("../mappers/playerMapper");
 const csv = require("csv-parser");
 const { Readable } = require("stream");
 
@@ -51,42 +52,12 @@ async function importarJugadores(buffer) {
       .on("error", reject);
   });
 
-  if (rawRows.length === 0) {
+  if (!rawRows.length) {
     throw new Error("El archivo CSV está vacío");
   }
 
   // Mapeo de datos
-  const players = rawRows.map((row) => {
-    return {
-      fifa_version: row.fifa_version,
-      fifa_update: row.fifa_update,
-      player_face_url: row.player_face_url,
-      long_name: row.long_name,
-      player_positions: row.player_positions,
-      club_name: row.club_name,
-      nationality_name: row.nationality_name,
-      overall: parseInt(row.overall),
-      potential: parseInt(row.potential),
-      value_eur: parseInt(row.value_eur) || null,
-      wage_eur: parseInt(row.wage_eur) || null,
-      age: parseInt(row.age),
-      height_cm: parseInt(row.height_cm) || null,
-      weight_kg: parseInt(row.weight_kg) || null,
-      preferred_foot: row.preferred_foot,
-      weak_foot: parseInt(row.weak_foot) || null,
-      skill_moves: parseInt(row.skill_moves) || null,
-      international_reputation: parseInt(row.international_reputation) || null,
-      work_rate: row.work_rate,
-      body_type: row.body_type,
-      pace: parseInt(row.pace) || null,
-      shooting: parseInt(row.shooting) || null,
-      passing: parseInt(row.passing) || null,
-      dribbling: parseInt(row.dribbling) || null,
-      defending: parseInt(row.defending) || null,
-      physic: parseInt(row.physic) || null,
-      player_traits: row.player_traits
-    };
-  });
+  const players = rawRows.map(playerMapper.fromCsvRow);
 
   const inserted = await playerProvider.bulkInsert(players);
 
