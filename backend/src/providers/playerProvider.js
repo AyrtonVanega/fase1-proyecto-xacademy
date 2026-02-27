@@ -12,7 +12,7 @@ async function findPaginated({ filters, page, limit }) {
       where,
       limit,
       offset,
-      order: [["overall", "DESC"]],
+      order: [["id", "ASC"]],
       raw: true // convierte instancias Sequelize a objetos planos
     });
 
@@ -62,7 +62,7 @@ async function findAllFiltered({ filters }) {
 
     const players = await Player.findAll({
       where,
-      order: [["overall", "DESC"]],
+      order: [["id", "ASC"]],
       raw: true
     });
 
