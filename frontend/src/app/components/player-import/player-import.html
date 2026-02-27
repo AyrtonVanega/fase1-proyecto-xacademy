@@ -1,0 +1,30 @@
+<div class="import-container">
+
+    <h2>Importar jugadores desde CSV</h2>
+
+    <div class="file-wrapper">
+        <label class="file-label">
+            Seleccionar CSV
+            <input class="file-input" type="file" accept=".csv" (change)="onFileSelected($event)" />
+        </label>
+
+        <span class="file-name" *ngIf="selectedFile">
+            {{ selectedFile.name }}
+        </span>
+    </div>
+
+    <button class="import-btn" (click)="import()" [disabled]="!selectedFile || loading">
+        {{ loading ? 'Importando...' : 'Importar' }}
+    </button>
+    <button (click)="goBack()" class="btn btn-back">Volver</button>
+
+    <div *ngIf="error" style="color:red">
+        {{ error }}
+    </div>
+
+    <div *ngIf="result">
+        <h4>Resultado:</h4>
+        <pre>{{ result | json }}</pre>
+    </div>
+
+</div>

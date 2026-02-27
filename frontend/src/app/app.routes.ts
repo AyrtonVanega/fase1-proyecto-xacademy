@@ -29,6 +29,12 @@ export const routes: Routes = [
             .then(m => m.PlayerDetailComponent)
       },
       {
+        path: 'import',
+        loadComponent: () =>
+          import('./components/player-import/player-import')
+            .then(m => m.PlayerImportComponent)
+      },
+      {
         path: ':id',
         loadComponent: () =>
           import('./components/player-detail/player-detail')

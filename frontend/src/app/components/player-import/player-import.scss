@@ -1,0 +1,89 @@
+.import-container {
+    max-width: 1500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #2a2a3d;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+
+    h2 {
+        color: #4a90e2;
+        margin-bottom: 1rem;
+    }
+
+    .file-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .file-input {
+        display: none;
+    }
+
+    .file-label {
+        padding: 0.7rem 1.4rem;
+        border-radius: 8px;
+        border: 2px dashed #4a90e2;
+        background-color: #1e1e2f;
+        color: #4a90e2;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.25s ease;
+
+        &:hover {
+            background-color: #4a90e2;
+            color: #ffffff;
+            border-color: #4a90e2;
+            transform: translateY(-1px);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+
+    .file-name {
+        font-size: 0.9rem;
+        color: #b0b0c0;
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .import-btn {
+        margin-top: 0.7rem;
+        margin-right: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        border: none;
+        background-color: #50c878;
+        color: #ffffff;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #4a90e2;
+        }
+    }
+
+    .btn-back {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 0.5rem;
+        margin-right: 0.5rem;
+        transition: background-color 0.3s, transform 0.1s;
+        background-color: #ff6b6b;
+        color: #fff;
+
+        &:hover {
+            background-color: #e74c3c;
+        }
+    }
+}

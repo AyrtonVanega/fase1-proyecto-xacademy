@@ -98,4 +98,8 @@ export class PlayersListComponent implements OnInit {
   createPlayer(): void {
     this.router.navigate(['/players/create']);
   }
+
+  importCsv(): void {
+    this.router.navigate(['/players/import']);
+  }
 }
