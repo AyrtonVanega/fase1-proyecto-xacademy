@@ -2,7 +2,7 @@ const express = require("express");
 const PORT = process.env.PORT || 3000;
 
 const cors = require("cors");
-const db = require("./models/index.js");
+const db = require("./models");
 const playerRoutes = require("./routes/playerRoutes");
 const authRoutes = require("./routes/authRoutes");
 

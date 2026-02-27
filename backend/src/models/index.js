@@ -1,6 +1,11 @@
 const sequelize = require("../config/dbConfig");
-const Player = require("./player");
+const { DataTypes } = require("sequelize");
 
-const db = { sequelize, Player };
+const Player = require("./player")(sequelize, DataTypes);
+
+const db = {
+    sequelize,
+    Player
+};
 
 module.exports = db;
