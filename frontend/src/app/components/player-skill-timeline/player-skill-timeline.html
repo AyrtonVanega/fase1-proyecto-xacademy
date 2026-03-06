@@ -20,17 +20,20 @@
 
         <button class="btn btn-back" (click)="goBack()">Volver</button>
 
-        <!-- Selector -->
-        <app-skill-selector [skillGroups]="skillGroups" [selectedSkills]="selectedSkills"
-            (skillToggle)="onSkillToggle($event)">
-        </app-skill-selector>
+        <div class="form-layout">
+            <!-- Selector -->
+            <app-skill-selector class="skill-selector" [skillGroups]="skillGroups" [selectedSkills]="selectedSkills"
+                (skillToggle)="onSkillToggle($event)">
+            </app-skill-selector>
 
-        <app-skill-timeline-chart [series]="chartData" [loading]="timelineLoading">
-        </app-skill-timeline-chart>
+            <!-- Gráfico -->
+            <app-skill-timeline-chart class="chart-wrapper" [series]="chartData" [loading]="timelineLoading">
+            </app-skill-timeline-chart>
 
-        <!-- Loader del timeline -->
-        <div *ngIf="timelineLoading">
-            Cargando datos...
+            <!-- Loader del timeline -->
+            <div *ngIf="timelineLoading">
+                Cargando datos...
+            </div>
         </div>
 
     </div>

@@ -1,15 +1,22 @@
 <div class="skill-selector">
 
     <div *ngFor="let group of skillGroups; trackBy: trackByGroup" class="skill-group">
-        <h4 class="group-title">{{ group.title }}</h4>
+        <button class="group-header" (click)="toggleGroup(group.title)" type="button">
 
-        <div class="skills-container">
+            <span class="arrow" [class.open]="isOpen(group.title)">
+                ▶ 
+            </span>
+            <span>{{ group.title }}</span>
+
+        </button>
+
+        <div class="skills-container" *ngIf="isOpen(group.title)">
 
             <label *ngFor="let skill of group.keys; trackBy: trackBySkill" class="skill-checkbox">
 
                 <input type="checkbox" [checked]="isSelected(skill)" (change)="onToggle(skill)" />
 
-                <span>{{ skill | titlecase }}</span>
+                <span>{{ skill.replace('_',' ') | titlecase }}</span>
 
             </label>
 

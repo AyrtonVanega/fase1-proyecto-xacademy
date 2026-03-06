@@ -1,51 +1,83 @@
 .skill-selector {
-    margin-top: 1.5rem;
+    margin-top: 1.2rem;
+    max-width: 300px;
 }
+
+/* CARD */
 
 .skill-group {
-    max-width: 280px;
-    margin-bottom: 1.8rem;
-    padding: 1rem 1.2rem;
-    background-color: rgba(255, 255, 255, 0.04);
-    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 5px;
+    margin-bottom: 0.8rem;
+    overflow: hidden;
 }
 
-.group-title {
-    font-size: 1.1rem;
+/* HEADER */
+
+.group-header {
+    width: 100%;
+    background: none;
+    border: none;
+
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    padding: 0.7rem 0.9rem;
+
+    font-size: 0.95rem;
     font-weight: 600;
-    margin-bottom: 0.8rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding-bottom: 0.4rem;
+
+    color: #4a90e2;
+
+    cursor: pointer;
 }
+
+.group-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* FLECHA */
+
+.arrow {
+    transition: transform 0.25s ease;
+}
+
+.arrow.open {
+    transform: rotate(90deg);
+}
+
+/* GRID DE SKILLS */
 
 .skills-container {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 6px;
+
+    padding: 0.6rem 0.8rem 0.8rem 0.8rem;
 }
+
+/* CHECKBOX */
 
 .skill-checkbox {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 0.35rem 0.4rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
+    gap: 6px;
 
-.skill-checkbox:hover {
-    background-color: rgba(255, 255, 255, 0.06);
-}
-
-.skill-checkbox input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    accent-color: #4da3ff;
+    font-size: 0.82rem;
     cursor: pointer;
+
+    min-width: 0;
 }
 
 .skill-checkbox span {
-    font-size: 0.9rem;
-    letter-spacing: 0.3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.skill-checkbox input {
+    width: 14px;
+    height: 14px;
+    accent-color: #4da3ff;
 }

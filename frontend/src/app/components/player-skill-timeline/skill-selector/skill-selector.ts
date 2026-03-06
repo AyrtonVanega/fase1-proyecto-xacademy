@@ -19,12 +19,22 @@ export class SkillSelectorComponent {
 
   @Output() skillToggle = new EventEmitter<string>();
 
+  openGroup: string | null = null;
+
   isSelected(skill: string): boolean {
     return this.selectedSkills.includes(skill);
   }
 
   onToggle(skill: string): void {
     this.skillToggle.emit(skill);
+  }
+
+  toggleGroup(groupTitle: string) {
+    this.openGroup = this.openGroup === groupTitle ? null : groupTitle;
+  }
+
+  isOpen(groupTitle: string): boolean {
+    return this.openGroup === groupTitle;
   }
 
   trackByGroup(_: number, group: SkillGroupConfig): string {
