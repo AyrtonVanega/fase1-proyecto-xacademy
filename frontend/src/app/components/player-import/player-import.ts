@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { ImportResultModalComponent } from './import-result-modal/import-result-modal';
 import { PlayerService } from '../../services/player';
 import { Router } from '@angular/router';
 
@@ -7,7 +8,8 @@ import { Router } from '@angular/router';
   selector: 'app-player-import',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    ImportResultModalComponent
   ],
   templateUrl: './player-import.html',
   styleUrl: './player-import.scss'
@@ -18,6 +20,7 @@ export class PlayerImportComponent {
   loading = false;
   result: any = null;
   error: string | null = null;
+  showModal = false;
 
   constructor(
     private playerService: PlayerService,
@@ -36,7 +39,7 @@ export class PlayerImportComponent {
     }
   }
 
-  import() {
+  importPlayers() {
     if (!this.selectedFile) return;
 
     this.loading = true;
@@ -48,10 +51,12 @@ export class PlayerImportComponent {
         next: (res) => {
           this.result = res;
           this.loading = false;
+          this.showModal = true;
         },
         error: (err) => {
           this.error = err.error?.message || 'Error al importar';
           this.loading = false;
+          this.showModal = true;
         }
       });
   }

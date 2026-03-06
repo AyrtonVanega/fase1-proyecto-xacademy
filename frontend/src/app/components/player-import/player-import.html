@@ -13,18 +13,17 @@
         </span>
     </div>
 
-    <button class="import-btn" (click)="import()" [disabled]="!selectedFile || loading">
+    <button class="import-btn" (click)="importPlayers()" [disabled]="!selectedFile || loading">
         {{ loading ? 'Importando...' : 'Importar' }}
     </button>
     <button (click)="goBack()" class="btn btn-back">Volver</button>
 
-    <div *ngIf="error" style="color:red">
-        {{ error }}
-    </div>
-
-    <div *ngIf="result">
-        <h4>Resultado:</h4>
-        <pre>{{ result | json }}</pre>
-    </div>
+    <app-import-result-modal 
+        *ngIf="showModal" 
+        [result]="result" 
+        [error]="error" 
+        (close)="showModal=false"
+    >
+    </app-import-result-modal>
 
 </div>

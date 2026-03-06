@@ -1,0 +1,31 @@
+<div class="modal-backdrop">
+
+    <div class="modal">
+
+        <h3>Resultado de la importación</h3>
+
+        <div *ngIf="error" class="error">
+            {{ error }}
+        </div>
+
+        <div *ngIf="result && !error">
+
+            <div class="stat">
+                <strong>Total procesados:</strong> {{ result.totalRows }}
+            </div>
+
+            <div class="stat success">
+                <strong>Jugadores importados:</strong> {{ result.inserted }}
+            </div>
+
+            <div class="stat warning">
+                <strong>Duplicados ignorados:</strong> {{ result.duplicates }}
+            </div>
+
+        </div>
+
+        <button class="btn btn-close" (click)="closeModal()">Cerrar</button>
+
+    </div>
+
+</div>
