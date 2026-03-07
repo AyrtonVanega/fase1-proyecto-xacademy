@@ -18,9 +18,28 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/players", playerRoutes);
 
-// Test conexión DB al arrancar
-db.sequelize.authenticate()
-  .then(() => console.log("✅ Conectado a la DB"))
-  .catch(err => console.error("❌ Error DB:", err));
+async function connectDB() {
+  let connected = false;
 
-app.listen(PORT, () => console.log(`Servidor escuchando en ${PORT}`));
+  while (!connected) {
+    try {
+      await db.sequelize.authenticate();
+      await db.sequelize.sync();
+      console.log("✅ Conectado a MySQL");
+      connected = true;
+    } catch (error) {
+      console.log("⏳ Esperando a MySQL...");
+      await new Promise((res) => setTimeout(res, 5000));
+    }
+  }
+}
+
+async function startServer() {
+  await connectDB();
+
+  app.listen(PORT, () => {
+    console.log(`🚀 Servidor escuchando en ${PORT}`);
+  });
+}
+
+startServer();
