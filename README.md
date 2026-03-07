@@ -2,7 +2,7 @@
 
 Aplicación fullstack para gestionar jugadores de FIFA.  
 Permite listar, filtrar, crear, editar, importar/exportar y analizar jugadores con gráficos interactivos.
-> En la carpeta `docs/` se incluye un ejemplo de archivo CSV para importar jugadores.
+> En la carpeta `docs/` se incluye un archivo CSV de ejemplo (`male_players.csv`) para importar jugadores en la aplicación.
 
 ---
 
@@ -105,6 +105,18 @@ Credenciales de prueba:
 
 * Usuario: usuario
 * Contraseña: 1234
+
+---
+
+# 📥 Carga inicial de datos
+
+La base de datos se inicia vacía.
+
+Para cargar jugadores de ejemplo:
+
+1. Iniciar sesión en la aplicación.
+2. Ir a la sección de importación de jugadores.
+3. Importar el archivo: `docs/male_players.csv`
 
 ---
 
