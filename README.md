@@ -1,95 +1,150 @@
 # ⚽️ FIFA Players App Proyecto XAcademy
 
 Aplicación fullstack para gestionar jugadores de FIFA.  
-Permite listar, filtrar, crear, editar y analizar jugadores con gráficos interactivos.
+Permite listar, filtrar, crear, editar, importar/exportar y analizar jugadores con gráficos interactivos.
+> En la carpeta `docs/` se incluye un ejemplo de archivo CSV para importar jugadores.
 
 ---
 
-## 🚀 Tecnologías utilizadas
+# 🏗️ Tecnologías utilizadas
 
-- **Backend:** Node.js + Express + Sequelize  
+- **Backend:** Node.js + Express  
 - **Frontend:** Angular  
 - **Base de Datos:** MySQL  
 - **ORM:** Sequelize  
 - **Cliente SQL:** DBeaver
+- **Contenedores:** Docker + Docker Compose
 
 ---
 
-## ⚙️ Requisitos previos
+# 🧩 Arquitectura
 
-Tecnologias necesarias para ejecutar la app
+El backend sigue una arquitectura en capas:
 
-- [Node.js](https://nodejs.org/) (v18 o superior)
-- [npm](https://www.npmjs.com/)
-- [MySQL Server](https://dev.mysql.com/downloads/)
-- [Angular CLI](https://angular.io/cli)
-- (Opcional) [DBeaver](https://dbeaver.io/) para administrar la base de datos
+Controllers → Services → Providers → Models
 
----
+Además se utilizan:
 
-## 🧩 Configuración de la base de datos
-
-1. Iniciá tu servidor MySQL
-2. Abrí **DBeaver** o una consola MySQL
-3. Ejecutá el archivo `fifa_local.sql`:
-
-
-Esto creará la base `fifa_local` y cargará los datos iniciales.
+- DTOs para transferencia de datos
+- Mappers para transformación de entidades
+- Middleware para autenticación JWT
 
 ---
 
-## 🛠️ Configuración del Backend
+# 📂 **Estructura del Proyecto**
 
-1. Entrá en la carpeta del backend
-2. Instalá las dependencias (npm install)
-3. Configurá las variables de conexión en el archivo `.env`
-4. Iniciá el servidor (npm run dev)
+## Backend:
+
+```
+config/
+middleware/
+controllers/
+services/
+providers/
+models/
+dtos/
+mappers/
+routes/
+utils/
+```
+
+## Frontend:
+
+```
+config/
+components/
+services/
+models/
+factories/
+guards/
+```
 
 ---
 
-## 💻 Configuración del Frontend
+# 🚀 Cómo levantar el proyecto
 
-1. Entrá en la carpeta del frontend
-2. Instalá las dependencias (npm install)
-3. Iniciá la aplicación (npm start / ng serve)
-4. Abrí el navegador en:
-[http://localhost:4200](http://localhost:4200)
+El proyecto se encuentra completamente dockerizado, por lo que no requiere configuraciones manuales adicionales para su ejecución básica.
+
+## 🔧 Requisitos previos
+- Docker
+- Docker Compose
 
 ---
 
-## 🔐 Log in
+# ▶️ Ejecución
 
-Datos para loguearse en la app:
+Desde la raíz del proyecto, ejecutar:
+
+```
+docker compose up --build
+```
+
+Esto levantará los siguientes servicios:
+
+- Backend
+- Frontend
+- MySQL
+
+---
+
+# 🌐 Acceso a la aplicación
+
+Una vez levantado el proyecto:
+
+- Frontend: http://localhost:4200
+
+- Backend API: http://localhost:3000
+
+---
+
+# 🔐 Autenticación
+
+Para utilizar la aplicación es necesario iniciar sesión.
+
+Credenciales de prueba:
 
 * Usuario: usuario
 * Contraseña: 1234
 
 ---
 
-## 🔄 Flujo de la aplicación
+# 🔄 Flujo de la aplicación
 
-1. El backend expone los endpoints en `api/players`
+1. El backend expone los endpoints bajo `/api`
 2. El frontend consume estos endpoints para:
 
+* Loguear usuarios
 * Listar jugadores
 * Filtrar por versión FIFA, club, nacionalidad, etc.
 * Crear y Editar jugadores
 * Mostrar gráficos de estadísticas
+* Importar y exportar jugadores mediante CSV/XLSX
+
+> Las rutas de `/api/players` requieren autenticación mediante token JWT.
 
 ---
 
-## 🧪 Endpoints
+# 🧪 Endpoints
 
-| Método | Endpoint              | Descripción                     |
-| :----: | :-------------------- | :------------------------------ |
-|   GET  | `/api/players`        | Listar jugadores con filtros    |
-|   GET  | `/api/players/export` | Exporta los jugadores filtrados |
-|   GET  | `/api/players/:id`    | Buscar jugador por ID           |
-|  POST  | `/api/players`        | Crear jugador                   |
-|   PUT  | `/api/players/:id`    | Actualizar jugador              |
-|   GET  | `/api/players/login`  | Loguea un usuario               |
+## Autenticación
+
+| Método | Endpoint | Descripción |
+|------|------|------|
+| POST | `/api/auth/login` | Inicia sesión y devuelve un JWT |
+
+## Jugadores
+
+| Método | Endpoint | Descripción |
+|------|------|------|
+| GET | `/api/players` | Listar jugadores con filtros |
+| GET | `/api/players/export` | Exportar jugadores filtrados |
+| GET | `/api/players/:id` | Buscar jugador por ID |
+| GET | `/api/players/:id/skills/timeline` | Evolución de habilidades |
+| POST | `/api/players/import` | Importar jugadores desde CSV |
+| POST | `/api/players` | Crear jugador |
+| PUT | `/api/players/:id` | Actualizar jugador |
 
 
-## 👨‍💻 Autor
+# 👨‍💻 Autor
 
 **Ayrton Vanega**
