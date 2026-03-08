@@ -59,12 +59,16 @@ async function importarJugadores(buffer) {
   // Mapeo de datos
   const players = rawRows.map(playerMapper.fromCsvRow);
 
-  const inserted = await playerProvider.bulkInsert(players);
+  const before = await playerProvider.count();
+  await playerProvider.bulkInsert(players);
+  const after = await playerProvider.count();
+
+  const inserted = after - before;
 
   return {
-    message: "Importación completada",
     totalRows: rawRows.length,
-    inserted
+    inserted,
+    duplicates: rawRows.length - inserted
   };
 }
 

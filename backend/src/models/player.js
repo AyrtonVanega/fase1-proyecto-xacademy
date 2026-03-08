@@ -180,5 +180,11 @@ module.exports = (sequelize, DataTypes) => {
     tableName: "players",
     timestamps: false,
     freezeTableName: true,
+    indexes: [
+      {
+        unique: true,
+        fields: ["fifa_version", "long_name"]
+      }
+    ]
   })
 };
