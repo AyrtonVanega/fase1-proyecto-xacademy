@@ -13,11 +13,19 @@
             </h3>
             <div class="actions">
 
-                <!-- Botones Editar / Volver / TimeLine (modo Vista) -->
+                <!-- Botones Editar / Volver / TimeLine / Eliminar (modo Vista) -->
                 <div *ngIf="isViewMode" class="edit-back-buttons">
                     <button (click)="toggleEditMode()" class="btn btn-edit">Editar</button>
                     <button (click)="goBack()" class="btn btn-back">Volver</button>
                     <button (click)="goToSkillTimeline()" class="btn btn-timeline">Timeline de Habilidades</button>
+
+                    <button (click)="openDeleteModal()" class="btn btn-delete">
+                        Eliminar jugador
+                    </button>
+                    <app-delete-player-modal *ngIf="showDeleteModal" (confirm)="confirmDelete()"
+                        (cancel)="closeDeleteModal()">
+                    </app-delete-player-modal>
+
                 </div>
 
                 <!-- Boton Guardar y Cancelar (modo Edicion / Creacion) -->

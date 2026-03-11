@@ -73,4 +73,8 @@ export class PlayerService {
     formData.append('file', file);
     return this.http.post(`${this.apiUrl}/import`, formData, { headers: this.getHeaders() });
   }
+
+  deletePlayer(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
+  }
 }

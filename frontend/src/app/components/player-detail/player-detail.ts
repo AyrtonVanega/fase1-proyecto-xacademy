@@ -8,6 +8,7 @@ import { SkillGroupModel } from '../../models/skill-group';
 import { BasicInfoComponent } from './basic-info/basic-info';
 import { SkillsAnalysisComponent } from './skills-analysis/skills-analysis';
 import { SkillsEditorComponent } from './skills-editor/skills-editor';
+import { DeletePlayerModalComponent } from './delete-player-modal/delete-player-modal';
 import { PlayerService } from '../../services/player';
 import { PLAYER_SKILLS_CONFIG } from '../../config/player-skill';
 import { BASIC_INFO_CONFIG } from '../../config/basic-info';
@@ -22,6 +23,7 @@ import { buildPlayerForm } from '../../factories/player-form';
     BasicInfoComponent,
     SkillsAnalysisComponent,
     SkillsEditorComponent,
+    DeletePlayerModalComponent,
   ],
   templateUrl: './player-detail.html',
   styleUrls: ['./player-detail.scss']
@@ -35,6 +37,7 @@ export class PlayerDetailComponent implements OnInit {
   id: number | null = null;
   mode: 'view' | 'edit' | 'create' = 'view';
   basicInfoFields = BASIC_INFO_CONFIG;
+  showDeleteModal = false;
 
   private destroyRef = inject(DestroyRef);
 
@@ -205,5 +208,22 @@ export class PlayerDetailComponent implements OnInit {
 
   goToSkillTimeline(): void {
     this.router.navigate([`/players/${this.id}/skills/timeline`]);
+  }
+
+  openDeleteModal() {
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+  }
+
+  confirmDelete() {
+
+    if (!this.player) return;
+
+    this.playerService.deletePlayer(this.player.id).subscribe(() => {
+      this.router.navigate(['/players']);
+    });
   }
 }

@@ -26,6 +26,7 @@
     .btn-cancel,
     .btn-back,
     .btn-edit,
+    .btn-delete,
     .btn-timeline,
     .btn-save {
         display: inline-block;
@@ -48,6 +49,7 @@
         }
     }
 
+    .btn-delete,
     .btn-back,
     .btn-cancel {
         background-color: #ff6b6b;
