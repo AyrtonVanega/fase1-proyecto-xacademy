@@ -28,6 +28,9 @@ router.get("/:id", playerController.getPlayerById);
 // Actualizar jugador
 router.put("/:id", playerController.updatePlayer);
 
+// Eliminar jugador
+router.delete("/:id", playerController.deletePlayer);
+
 // Crear nuevo jugador
 router.post("/", playerController.createPlayer);
 

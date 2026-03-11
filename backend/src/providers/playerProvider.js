@@ -150,6 +150,19 @@ async function count() {
   }
 }
 
+async function deletePlayer(id) {
+  try {
+    const deleted = await Player.destroy({
+      where: { id: id }
+    });
+
+    return deleted; // cantidad de registros eliminados (0 o 1)
+  } catch (error) {
+    console.error("Error en PlayerProvider.deletePlayer:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   findPaginated,
   findAllFiltered,
@@ -158,5 +171,6 @@ module.exports = {
   createPlayer,
   findVersionsByPlayerIdentity,
   bulkInsert,
-  count
+  count,
+  deletePlayer
 };

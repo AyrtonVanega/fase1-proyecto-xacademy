@@ -72,4 +72,22 @@ async function importarJugadores(buffer) {
   };
 }
 
-module.exports = { buscarTodos, exportarJugadores, buscarPorId, actualizarJugador, crearJugador, obtenerTimelineHabilidades, importarJugadores };
+async function eliminarJugador(id) {
+  try {
+    return await playerProvider.deletePlayer(id);
+  } catch (err) {
+    console.error("Error en PlayerService.eliminarJugador:", err);
+    throw err;
+  }
+}
+
+module.exports = {
+  buscarTodos,
+  exportarJugadores,
+  buscarPorId,
+  actualizarJugador,
+  crearJugador,
+  obtenerTimelineHabilidades,
+  importarJugadores,
+  eliminarJugador
+};

@@ -1,6 +1,7 @@
 const playerService = require("../services/playerService");
 const { sendXlsx } = require("../utils/exportXlsx");
 const SkillTimelineDTO = require("../dtos/skillTimeLineDto");
+const player = require("../models/player");
 
 /**
  * Devuelve todos los jugadores, filtrando por nombre si se especifica.
@@ -158,4 +159,33 @@ const importPlayers = async (req, res) => {
   }
 };
 
-module.exports = { listPlayers, exportPlayers, getPlayerById, updatePlayer, createPlayer, getSkillTimeline, importPlayers };
+const deletePlayer = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "ID inválido" });
+    }
+
+    const deleted = await playerService.eliminarJugador(id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Jugador no encontrado" });
+    }
+
+    res.status(204).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error interno al eliminar jugador" });
+  }
+};
+
+module.exports = {
+  listPlayers, 
+  exportPlayers, 
+  getPlayerById, 
+  updatePlayer, 
+  createPlayer, 
+  getSkillTimeline, 
+  importPlayers,
+  deletePlayer
+};
