@@ -5,6 +5,7 @@ const cors = require("cors");
 const db = require("./models");
 const playerRoutes = require("./routes/playerRoutes");
 const authRoutes = require("./routes/authRoutes");
+const { errorHandler } = require("./middleware");
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 // Rutas
 app.use("/api/auth", authRoutes);
 app.use("/api/players", playerRoutes);
+
+app.use(errorHandler);
 
 async function connectDB() {
   let connected = false;

@@ -3,31 +3,25 @@ const { Op } = require("sequelize");
 const Player = db.Player;
 
 async function findPaginated({ filters, page, limit }) {
-  try {
-    const where = buildWhere(filters);
+  const where = buildWhere(filters);
 
-    const offset = (page - 1) * limit;
+  const offset = (page - 1) * limit;
 
-    const { rows, count } = await Player.findAndCountAll({
-      where,
-      limit,
-      offset,
-      order: [["id", "ASC"]],
-      raw: true // convierte instancias Sequelize a objetos planos
-    });
+  const { rows, count } = await Player.findAndCountAll({
+    where,
+    limit,
+    offset,
+    order: [["id", "ASC"]],
+    raw: true // convierte instancias Sequelize a objetos planos
+  });
 
-    return {
-      data: rows,
-      total: count,
-      totalPages: Math.ceil(count / limit),
-      page,
-      limit
-    };
-
-  } catch (err) {
-    console.error("Error en PlayerProvider.findPaginated:", err);
-    throw err;
-  }
+  return {
+    data: rows,
+    total: count,
+    totalPages: Math.ceil(count / limit),
+    page,
+    limit
+  };
 }
 
 function buildWhere(filters) {
@@ -57,31 +51,20 @@ function buildWhere(filters) {
 }
 
 async function findAllFiltered({ filters }) {
-  try {
-    const where = buildWhere(filters);
+  const where = buildWhere(filters);
 
-    const players = await Player.findAll({
-      where,
-      order: [["id", "ASC"]],
-      raw: true
-    });
+  const players = await Player.findAll({
+    where,
+    order: [["id", "ASC"]],
+    raw: true
+  });
 
-    return players;
-  } catch (error) {
-    console.error("Error en PlayerProvider.findAllFiltered:", error);
-    throw error;
-  }
-
+  return players;
 }
 
 async function findById(id) {
-  try {
-    const player = await Player.findByPk(id);
-    return player ? player.get({ plain: true }) : null;
-  } catch (err) {
-    console.error("Error en PlayerProvider.findById:", err);
-    throw err;
-  }
+  const player = await Player.findByPk(id);
+  return player ? player.get({ plain: true }) : null;
 }
 
 async function updateById(id, data) {
@@ -95,72 +78,46 @@ async function updateById(id, data) {
 }
 
 async function createPlayer(data) {
-  try {
-    const newPlayer = await Player.create(data);
-    return newPlayer.get({ plain: true });
-  } catch (err) {
-    console.error("Error en PlayerProvider.createPlayer:", err);
-    throw err;
-  }
+  const newPlayer = await Player.create(data);
+  return newPlayer.get({ plain: true });
 }
 
 async function findVersionsByPlayerIdentity(name, nationality, attributes) {
-  try {
-    return await Player.findAll({
-      where: {
-        long_name: name,
-        nationality_name: nationality
-      },
-      attributes,
-      order: [["fifa_version", "ASC"]],
-      raw: true
-    });
-  } catch (err) {
-    console.error("Error en PlayerProvider.findVersionsByPlayerIdentity:", err);
-    throw err;
-  }
+  return await Player.findAll({
+    where: {
+      long_name: name,
+      nationality_name: nationality
+    },
+    attributes,
+    order: [["fifa_version", "ASC"]],
+    raw: true
+  });
 }
 
 async function bulkInsert(players) {
-  try {
-    const chunkSize = 1000;
+  const chunkSize = 1000;
 
-    for (let i = 0; i < players.length; i += chunkSize) {
-      const chunk = players.slice(i, i + chunkSize);
+  for (let i = 0; i < players.length; i += chunkSize) {
+    const chunk = players.slice(i, i + chunkSize);
 
-      await Player.bulkCreate(chunk, {
-        validate: true,
-        ignoreDuplicates: true
-      });
+    await Player.bulkCreate(chunk, {
+      validate: true,
+      ignoreDuplicates: true
+    });
 
-    }
-
-  } catch (err) {
-    console.error("Error en PlayerProvider.bulkInsert:", err);
-    throw err;
   }
 }
 
 async function count() {
-  try {
-    return await Player.count();
-  } catch (err) {
-    console.error("Error en PlayerProvider.count:", err);
-    throw err;
-  }
+  return await Player.count();
 }
 
 async function deletePlayer(id) {
-  try {
-    const deleted = await Player.destroy({
-      where: { id: id }
-    });
+  const deleted = await Player.destroy({
+    where: { id: id }
+  });
 
-    return deleted; // cantidad de registros eliminados (0 o 1)
-  } catch (error) {
-    console.error("Error en PlayerProvider.deletePlayer:", error);
-    throw error;
-  }
+  return deleted; // cantidad de registros eliminados (0 o 1)
 }
 
 module.exports = {

@@ -1,25 +1,24 @@
 const playerService = require("../services/playerService");
 const { sendXlsx } = require("../utils/exportXlsx");
 const SkillTimelineDTO = require("../dtos/skillTimeLineDto");
-const player = require("../models/player");
 
 /**
  * Devuelve todos los jugadores, filtrando por nombre si se especifica.
  */
-const listPlayers = async (req, res) => {
+const listPlayers = async (req, res, next) => {
+  const {
+    fifa_version,
+    name,
+    nationality,
+    club,
+    position,
+  } = req.query;
+
+  const page = Math.max(parseInt(req.query.page) || 1, 1);
+  const filters = { fifa_version, name, nationality, club, position };
+  const limit = 50;
+
   try {
-    const {
-      fifa_version,
-      name,
-      nationality,
-      club,
-      position,
-    } = req.query;
-
-    const page = Math.max(parseInt(req.query.page) || 1, 1);
-    const filters = { fifa_version, name, nationality, club, position };
-    const limit = 50;
-
     const result = await playerService.buscarTodos({
       filters,
       page,
@@ -27,44 +26,42 @@ const listPlayers = async (req, res) => {
     });
 
     res.json(result);
-  } catch (err) {
-    console.error("listPlayers error:", err);
-    res.status(500).json({ error: "Error interno al obtener jugadores" });
+  } catch (error) {
+    next(error);
   }
 };
 
 /**
  * Exporta los jugadores filtrados a un archivo XLSX.
  */
-const exportPlayers = async (req, res) => {
+const exportPlayers = async (req, res, next) => {
+  const {
+    fifa_version,
+    name,
+    nationality,
+    club,
+    position
+  } = req.query;
+
+  const filters = { fifa_version, name, nationality, club, position };
+
   try {
-    const { 
-      fifa_version,
-      name, 
-      nationality, 
-      club, 
-      position 
-    } = req.query;
-
-    const filters = { fifa_version, name, nationality, club, position };
-
     const players = await playerService.exportarJugadores({ filters });
 
     // Enviar XLSX
     sendXlsx(res, players, "players.xlsx");
   } catch (error) {
-    console.error("Error exportando jugadores:", error);
-    res.status(500).json({ message: "Error exportando jugadores" });
+    next(error);
   }
 };
 
-const getPlayerById = async (req, res) => {
-  try {
-    const id = parseInt(req.params.id);
-    if (isNaN(id)) {
-      return res.status(400).json({ message: "ID inválido" });
-    }
+const getPlayerById = async (req, res, next) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) {
+    return res.status(400).json({ message: "ID inválido" });
+  }
 
+  try {
     const player = await playerService.buscarPorId(id);
 
     if (!player) {
@@ -72,19 +69,18 @@ const getPlayerById = async (req, res) => {
     }
 
     res.json(player);
-  } catch (err) {
-    console.error("getPlayerById error:", err);
-    res.status(500).json({ error: "Error interno al obtener jugador" });
+  } catch (error) {
+    next(error);
   }
 };
 
-const updatePlayer = async (req, res) => {
-  try {
-    const id = parseInt(req.params.id);
-    if (isNaN(id)) {
-      return res.status(400).json({ message: "ID inválido" });
-    }
+const updatePlayer = async (req, res, next) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) {
+    return res.status(400).json({ message: "ID inválido" });
+  }
 
+  try {
     const updated = await playerService.actualizarJugador(id, req.body);
 
     if (!updated) {
@@ -93,35 +89,33 @@ const updatePlayer = async (req, res) => {
 
     res.json(updated);
 
-  } catch (err) {
-    console.error("updatePlayer error:", err);
-    res.status(500).json({ error: "Error interno al actualizar jugador" });
+  } catch (error) {
+    next(error);
   }
 };
 
-const createPlayer = async (req, res) => {
+const createPlayer = async (req, res, next) => {
   try {
     const newPlayer = await playerService.crearJugador(req.body);
     res.status(201).json(newPlayer);
-  } catch (err) {
-    console.error("createPlayer error:", err);
-    res.status(500).json({ error: "Error interno al crear jugador" });
+  } catch (error) {
+    next(error);
   }
 };
 
-const getSkillTimeline = async (req, res) => {
+const getSkillTimeline = async (req, res, next) => {
+  const { id } = req.params;
+  const { skills } = req.query;
+
+  if (!skills) {
+    return res.status(400).json({
+      message: "Query param 'skills' is required"
+    });
+  }
+
+  const skillsArray = skills.split(",");
+
   try {
-    const { id } = req.params;
-    const { skills } = req.query;
-
-    if (!skills) {
-      return res.status(400).json({
-        message: "Query param 'skills' is required"
-      });
-    }
-
-    const skillsArray = skills.split(",");
-
     const records = await playerService.obtenerTimelineHabilidades(
       id,
       skillsArray
@@ -138,34 +132,32 @@ const getSkillTimeline = async (req, res) => {
     res.json(response);
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 
-const importPlayers = async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
+const importPlayers = async (req, res, next) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
 
+  try {
     const result = await playerService.importarJugadores(req.file.buffer);
 
     return res.status(201).json(result);
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error importing players" });
+    next(error);
   }
 };
 
-const deletePlayer = async (req, res) => {
-  try {
-    const id = parseInt(req.params.id);
-    if (isNaN(id)) {
-      return res.status(400).json({ message: "ID inválido" });
-    }
+const deletePlayer = async (req, res, next) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) {
+    return res.status(400).json({ message: "ID inválido" });
+  }
 
+  try {
     const deleted = await playerService.eliminarJugador(id);
 
     if (!deleted) {
@@ -174,18 +166,17 @@ const deletePlayer = async (req, res) => {
 
     res.status(204).send();
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error interno al eliminar jugador" });
+    next(error);
   }
 };
 
 module.exports = {
-  listPlayers, 
-  exportPlayers, 
-  getPlayerById, 
-  updatePlayer, 
-  createPlayer, 
-  getSkillTimeline, 
+  listPlayers,
+  exportPlayers,
+  getPlayerById,
+  updatePlayer,
+  createPlayer,
+  getSkillTimeline,
   importPlayers,
   deletePlayer
 };

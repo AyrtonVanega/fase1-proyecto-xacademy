@@ -12,12 +12,7 @@ async function exportarJugadores({ filters }) {
 }
 
 async function buscarPorId(id) {
-  try {
-    return await playerProvider.findById(id);
-  } catch (err) {
-    console.error("Error en PlayerService.buscarPorId:", err);
-    throw err;
-  }
+  return await playerProvider.findById(id);
 }
 
 async function actualizarJugador(id, data) {
@@ -73,12 +68,7 @@ async function importarJugadores(buffer) {
 }
 
 async function eliminarJugador(id) {
-  try {
-    return await playerProvider.deletePlayer(id);
-  } catch (err) {
-    console.error("Error en PlayerService.eliminarJugador:", err);
-    throw err;
-  }
+  return await playerProvider.deletePlayer(id);
 }
 
 module.exports = {
