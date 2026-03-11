@@ -1,7 +1,7 @@
 # ⚽️ FIFA Players App Proyecto XAcademy
 
 Aplicación fullstack para gestionar jugadores de FIFA.  
-Permite listar, filtrar, crear, editar, importar/exportar y analizar jugadores con gráficos interactivos.
+Permite listar, filtrar, crear, editar, eliminar, importar/exportar y analizar jugadores con gráficos interactivos.
 > En la carpeta `docs/` se incluye un archivo CSV de ejemplo (`male_players.csv`) para importar jugadores en la aplicación.
 
 ---
@@ -128,7 +128,7 @@ Para cargar jugadores de ejemplo:
 * Loguear usuarios
 * Listar jugadores
 * Filtrar por versión FIFA, club, nacionalidad, etc.
-* Crear y Editar jugadores
+* Crear, Editar y Eliminar jugadores
 * Mostrar gráficos de estadísticas
 * Importar y exportar jugadores mediante CSV/XLSX
 
@@ -155,6 +155,7 @@ Para cargar jugadores de ejemplo:
 | POST | `/api/players/import` | Importar jugadores desde CSV |
 | POST | `/api/players` | Crear jugador |
 | PUT | `/api/players/:id` | Actualizar jugador |
+| DEL | `/api/players/:id` | Eliminar jugador |
 
 
 # 👨‍💻 Autor
