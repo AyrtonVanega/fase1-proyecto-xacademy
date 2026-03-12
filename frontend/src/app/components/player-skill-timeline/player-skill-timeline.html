@@ -15,8 +15,10 @@
     <div *ngIf="!playerLoading && player">
 
         <h2 class="timeline-title">
-            Timeline de Habilidades para {{ player.long_name }}
+            Timeline de Habilidades
         </h2>
+        
+        <app-player-header [player]="player"></app-player-header>
 
         <button class="btn btn-back" (click)="goBack()">Volver</button>
 

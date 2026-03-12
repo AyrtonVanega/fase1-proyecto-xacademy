@@ -1,0 +1,27 @@
+.player-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.player-name {
+    color: #4a90e2;
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.player-meta {
+    display: flex;
+    gap: 1.2rem;
+    margin-top: 0.4rem;
+}
+
+.meta-item {
+    font-size: 0.9rem;
+    opacity: 0.85;
+}

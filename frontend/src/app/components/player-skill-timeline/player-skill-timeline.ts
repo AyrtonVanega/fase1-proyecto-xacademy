@@ -6,6 +6,7 @@ import { PlayerService } from '../../services/player';
 import { SkillSelectorComponent } from './skill-selector/skill-selector';
 import { PLAYER_SKILLS_CONFIG } from '../../config/player-skill';
 import { SkillTimelineChartComponent } from './skill-timeline-chart/skill-timeline-chart';
+import { PlayerHeaderComponent } from './player-header/player-header';
 
 interface BackendTimelineResponse {
   playerId: number;
@@ -25,6 +26,7 @@ export interface ChartSeries {
     CommonModule,
     SkillSelectorComponent,
     SkillTimelineChartComponent,
+    PlayerHeaderComponent,
   ],
   templateUrl: './player-skill-timeline.html',
   styleUrl: './player-skill-timeline.scss',
