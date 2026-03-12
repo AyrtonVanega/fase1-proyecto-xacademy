@@ -17,7 +17,7 @@
         <h2 class="timeline-title">
             Timeline de Habilidades
         </h2>
-        
+
         <app-player-header [player]="player"></app-player-header>
 
         <button class="btn btn-back" (click)="goBack()">Volver</button>
@@ -37,6 +37,9 @@
                 Cargando datos...
             </div>
         </div>
+
+        <app-skill-stats-summary [series]="chartData">
+        </app-skill-stats-summary>
 
     </div>
 

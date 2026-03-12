@@ -7,6 +7,7 @@ import { SkillSelectorComponent } from './skill-selector/skill-selector';
 import { PLAYER_SKILLS_CONFIG } from '../../config/player-skill';
 import { SkillTimelineChartComponent } from './skill-timeline-chart/skill-timeline-chart';
 import { PlayerHeaderComponent } from './player-header/player-header';
+import { SkillStatsSummaryComponent } from './skill-stats-summary/skill-stats-summary';
 
 interface BackendTimelineResponse {
   playerId: number;
@@ -27,6 +28,7 @@ export interface ChartSeries {
     SkillSelectorComponent,
     SkillTimelineChartComponent,
     PlayerHeaderComponent,
+    SkillStatsSummaryComponent,
   ],
   templateUrl: './player-skill-timeline.html',
   styleUrl: './player-skill-timeline.scss',

@@ -1,0 +1,39 @@
+<div class="stats-container">
+
+    <div class="skill-card" *ngFor="let s of stats">
+
+        <div class="skill-title">
+            {{ s.label | titlecase }}
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat">
+                <span class="stat-label">Max</span>
+                <span class="stat-value">{{ s.max }}</span>
+            </div>
+
+            <div class="stat">
+                <span class="stat-label">Min</span>
+                <span class="stat-value">{{ s.min }}</span>
+            </div>
+
+            <div class="stat">
+                <span class="stat-label">Prom</span>
+                <span class="stat-value">{{ s.avg }}</span>
+            </div>
+
+            <div class="stat">
+                <span class="stat-label">Δ</span>
+                <span class="stat-value" [class.positive]="s.variation > 0" [class.negative]="s.variation < 0">
+
+                    {{ s.variation > 0 ? '+' : '' }}{{ s.variation }}
+
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
